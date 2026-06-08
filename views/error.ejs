@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Error — LI Scraper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <%- include('partials/sidebar', { page: '' }) %>
+  <main class="main">
+    <header class="topbar">
+      <h1 class="topbar-title">Error <%= status %></h1>
+    </header>
+    <div class="content">
+      <div class="alert alert-error">
+        <span class="alert-icon">⚠</span>
+        <div><%= message %></div>
+      </div>
+      <a href="/linkedin" class="btn btn-primary">← Back to Dashboard</a>
+    </div>
+  </main>
+</body>
+</html>

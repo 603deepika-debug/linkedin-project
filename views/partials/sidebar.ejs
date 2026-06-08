@@ -1,0 +1,34 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <span class="brand-icon">⬡</span>
+    <span class="brand-name">LI<br>Scraper</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group">
+      <div class="nav-label">Profile</div>
+      <a href="/linkedin/profile/detail"      class="nav-link <%= page==='profile-detail'      ?'active':'' %>">Detail</a>
+      <a href="/linkedin/profile/posts"       class="nav-link <%= page==='profile-posts'       ?'active':'' %>">Posts</a>
+      <a href="/linkedin/profile/experience"  class="nav-link <%= page==='profile-experience'  ?'active':'' %>">Experience</a>
+      <a href="/linkedin/profile/education"   class="nav-link <%= page==='profile-education'   ?'active':'' %>">Education</a>
+      <a href="/linkedin/profile/skills"      class="nav-link <%= page==='profile-skills'      ?'active':'' %>">Skills</a>
+      <a href="/linkedin/profile/connections" class="nav-link <%= page==='profile-connections' ?'active':'' %>">Connections</a>
+      <a href="/linkedin/profile/upload"      class="nav-link upload-link <%= page==='profile-upload' ?'active':'' %>">↑ Upload Profile</a>
+      <a href="/linkedin/profile/view"       class="nav-link view-link <%= page==='profile-view' ?'active':'' %>">👤 Profile Page</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Company</div>
+      <a href="/linkedin/company/detail"    class="nav-link <%= page==='company-detail'    ?'active':'' %>">Detail</a>
+      <a href="/linkedin/company/employees" class="nav-link <%= page==='company-employees' ?'active':'' %>">Employees</a>
+      <a href="/linkedin/company/jobs"      class="nav-link <%= page==='company-jobs'      ?'active':'' %>">Jobs</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Search</div>
+      <a href="/linkedin/search/people"    class="nav-link <%= page==='search-people'    ?'active':'' %>">People</a>
+      <a href="/linkedin/search/companies" class="nav-link <%= page==='search-companies' ?'active':'' %>">Companies</a>
+      <a href="/linkedin/search/jobs"      class="nav-link <%= page==='search-jobs'      ?'active':'' %>">Jobs</a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <span class="api-badge">RapidAPI</span>
+  </div>
+</aside>

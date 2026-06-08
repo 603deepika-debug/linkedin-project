@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — LI Scraper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <%- include('partials/sidebar', { page: 'dashboard' }) %>
+  <main class="main">
+    <header class="topbar">
+      <h1 class="topbar-title">Dashboard</h1>
+      <div class="topbar-meta"></div>
+    </header>
+    <div class="content">
+
+      <div class="hero-stat">
+        <div class="stat-box"><div class="stat-num">13</div><div class="stat-label">Endpoints</div></div>
+        <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">Categories</div></div>
+        <div class="stat-box"><div class="stat-num" style="font-size:20px;padding-top:6px">LIVE</div><div class="stat-label">Real-Time</div></div>
+      </div>
+
+      <div class="section-header">Profile Endpoints</div>
+      <div class="dashboard-grid">
+        <a href="/linkedin/profile/detail" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Profile Detail</div>
+          <div class="ec-path">/profile/detail</div><div class="ec-desc">Full profile info, headline, summary, photo</div>
+        </a>
+        <a href="/linkedin/profile/posts" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Profile Posts</div>
+          <div class="ec-path">/profile/posts</div><div class="ec-desc">Recent posts and activity feed</div>
+        </a>
+        <a href="/linkedin/profile/experience" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Experience</div>
+          <div class="ec-path">/profile/experience</div><div class="ec-desc">Work history and job titles</div>
+        </a>
+        <a href="/linkedin/profile/education" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Education</div>
+          <div class="ec-path">/profile/education</div><div class="ec-desc">Degrees, schools, certifications</div>
+        </a>
+        <a href="/linkedin/profile/skills" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Skills</div>
+          <div class="ec-path">/profile/skills</div><div class="ec-desc">Listed skills and endorsements</div>
+        </a>
+        <a href="/linkedin/profile/connections" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Connections</div>
+          <div class="ec-path">/profile/connections</div><div class="ec-desc">Network connections and mutual contacts</div>
+        </a>
+        <a href="/linkedin/profile/upload" class="endpoint-card">
+          <span class="ec-method ec-post">POST</span><div class="ec-name">Upload Profile</div>
+          <div class="ec-path">/profile/upload</div><div class="ec-desc">Import profile by LinkedIn URL</div>
+        </a>
+      </div>
+
+      <div class="section-header">Company Endpoints</div>
+      <div class="dashboard-grid">
+        <a href="/linkedin/company/detail" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Company Detail</div>
+          <div class="ec-path">/company/detail</div><div class="ec-desc">Overview, industry, size, description</div>
+        </a>
+        <a href="/linkedin/company/employees" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Employees</div>
+          <div class="ec-path">/company/employees</div><div class="ec-desc">Employee list with roles</div>
+        </a>
+        <a href="/linkedin/company/jobs" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Company Jobs</div>
+          <div class="ec-path">/company/jobs</div><div class="ec-desc">Active job postings at the company</div>
+        </a>
+      </div>
+
+      <div class="section-header">Search Endpoints</div>
+      <div class="dashboard-grid">
+        <a href="/linkedin/search/people" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Search People</div>
+          <div class="ec-path">/search/people</div><div class="ec-desc">Find professionals by keyword</div>
+        </a>
+        <a href="/linkedin/search/companies" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Search Companies</div>
+          <div class="ec-path">/search/companies</div><div class="ec-desc">Discover companies by name or keyword</div>
+        </a>
+        <a href="/linkedin/search/jobs" class="endpoint-card">
+          <span class="ec-method ec-get">GET</span><div class="ec-name">Search Jobs</div>
+          <div class="ec-path">/search/jobs</div><div class="ec-desc">Job listings across LinkedIn</div>
+        </a>
+      </div>
+
+    </div>
+  </main>
+  <script src="/js/app.js"></script>
+</body>
+</html>

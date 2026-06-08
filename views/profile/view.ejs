@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= (profile && profile.detail && (profile.detail.firstName || profile.detail.name)) ? (profile.detail.firstName || profile.detail.name) + ' — Profile' : 'Profile View' %> — LI Scraper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css" />
+  <style>
+    /* ── Profile Page Specific Styles ── */
+    /* .profile-page { max-width: 780px; margin: 0 auto; } */
+    .profile-page {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Search form card */
+    .search-bar-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .search-bar-card .form-group { flex: 1; margin: 0; }
+    .search-bar-card label { margin-bottom: 6px; }
+
+    /* ── Cover + Avatar Card ── */
+    .profile-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .cover-photo {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #0a3d8f 0%, #0a84ff 50%, #00d4aa 100%);
+      display: block;
+      position: relative;
+    }
+    .cover-placeholder {
+      width: 100%;
+      height: 160px;
+      background: linear-gradient(135deg, #0a1628 0%, #0a2d5e 40%, #0a3d8f 100%);
+      position: relative;
+    }
+    .cover-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(10,132,255,.04) 20px,
+        rgba(10,132,255,.04) 40px
+      );
+    }
+    .profile-identity {
+      padding: 0 24px 20px;
+      position: relative;
+    }
+    .avatar-wrap {
+      position: relative;
+      display: inline-block;
+      margin-top: -48px;
+      margin-bottom: 12px;
+    }
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      border: 4px solid var(--bg2);
+      object-fit: cover;
+      background: var(--bg3);
+      display: block;
+    }
+    .avatar-placeholder {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      border: 4px solid var(--bg2);
+      background: linear-gradient(135deg, #1a2d4a, #0a84ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .online-dot {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--success);
+      border: 2px solid var(--bg2);
+    }
+    .profile-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+    .profile-headline {
+      font-size: 15px;
+      color: var(--text2);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .profile-location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text3);
+      margin-bottom: 12px;
+      font-family: var(--mono);
+    }
+    .profile-location span { color: var(--accent); }
+    .profile-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .meta-chip {
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .meta-chip strong { color: var(--text); font-size: 13px; }
+    .connect-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-connect {
+      background: var(--accent);
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-message {
+      background: transparent;
+      color: var(--accent);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 13px;
+      border: 2px solid var(--accent);
+      cursor: pointer;
+    }
+    .btn-more {
+      background: var(--bg3);
+      color: var(--text2);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 13px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    /* ── About Card ── */
+    .section-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 16px;
+    }
+    .section-card-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-card-title .icon {
+      font-size: 16px;
+      opacity: .7;
+    }
+    .about-text {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.75;
+      white-space: pre-line;
+    }
+
+    /* ── Experience Items ── */
+    .exp-list { display: flex; flex-direction: column; gap: 20px; }
+    .exp-item { display: flex; gap: 16px; }
+    .exp-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      object-fit: contain;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--text3);
+      overflow: hidden;
+    }
+    .exp-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+    .exp-info { flex: 1; }
+    .exp-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .exp-company { font-size: 13px; color: var(--text2); margin-bottom: 2px; }
+    .exp-date {
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--text3);
+      margin-bottom: 6px;
+    }
+    .exp-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+    .exp-divider {
+      height: 1px;
+      background: var(--border);
+      margin-top: 20px;
+    }
+
+    /* ── Education ── */
+    .edu-item { display: flex; gap: 16px; margin-bottom: 18px; }
+    .edu-item:last-child { margin-bottom: 0; }
+    .edu-logo {
+      width: 48px; height: 48px;
+      border-radius: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0; overflow: hidden;
+    }
+    .edu-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .edu-school { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .edu-degree { font-size: 13px; color: var(--text2); margin-bottom: 2px; }
+    .edu-date { font-size: 12px; font-family: var(--mono); color: var(--text3); }
+
+    /* ── Skills ── */
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+    .skill-chip {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: var(--text2);
+      font-weight: 600;
+      transition: all .15s;
+    }
+    .skill-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(10,132,255,.08);
+    }
+
+    /* ── Open To / Connections Banner ── */
+    .open-to-card {
+      background: linear-gradient(135deg, rgba(10,132,255,.1), rgba(0,212,170,.08));
+      border: 1px solid rgba(10,132,255,.25);
+      border-radius: var(--radius);
+      padding: 16px 24px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .open-to-icon { font-size: 26px; }
+    .open-to-text { font-size: 13px; color: var(--text2); }
+    .open-to-text strong { color: var(--accent); font-size: 14px; display: block; margin-bottom: 2px; }
+
+    /* ── Empty State ── */
+    .empty-hint {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--text3);
+    }
+    .empty-hint .big-icon { font-size: 48px; margin-bottom: 12px; display: block; }
+    .empty-hint p { font-size: 14px; }
+    .empty-hint .sub { font-size: 12px; font-family: var(--mono); margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <%- include('../partials/sidebar', { page: 'profile-view' }) %>
+  <main class="main">
+    <header class="topbar">
+      <h1 class="topbar-title">Profile Page</h1>
+      <div class="topbar-meta"><code class="endpoint-badge">GET /profile/detail + /experience + /education + /skills</code></div>
+    </header>
+    <div class="content">
+    <div class="profile-page">
+
+      <!-- Search Form -->
+      <div class="search-bar-card">
+        <div class="form-group">
+          <label for="username">LinkedIn Username</label>
+          <input type="text" id="profile_url" placeholder="https://www.linkedin.com/in/neal-mohan" value="<%= profile_url %>" />
+        </div>
+        <button class="btn btn-primary" onclick="fetchProfile()">View Profile →</button>
+      </div>
+
+      <% if (error) { %>
+        <div class="alert alert-error">
+          <span class="alert-icon">⚠</span>
+          <div><strong>Error:</strong> <%= error %></div>
+        </div>
+      <% } %>
+
+      <% if (!profile) { %>
+        <!-- Empty State -->
+        <div class="section-card">
+          <div class="empty-hint">
+            <span class="big-icon">👤</span>
+            <p>Enter a LinkedIn url to view their full profile</p>
+            <p class="sub">https://www.linkedin.com/in/neal-mohan</p>
+          </div>
+        </div>
+
+      <% } else { %>
+
+        <%
+          // Handle different API response shapes
+          const d=profile.basic_info || {};
+
+          const firstName = d.first_name || '';
+          const lastName = d.last_name || '';
+          const fullName = d.fullname || '';
+          const headline   = d.headline   || d.title       || d.occupation || '';
+          const summary    = d.summary    || d.about       || d.description || '';
+          const location = d.location?.full || '';
+          const photo      = d.profile_picture_url || '';
+          const cover      = d.background_picture_url || '';
+     
+          const connCount =  d.connection_count || d.connections || d.follower_count || 0;
+          const openToWork = d.open_to_work || false;
+          const industry   = d.industry   || '';
+          const website    = d.website    || d.websites?.[0] || '';
+          const initials   = (firstName[0] || '') + (lastName[0] || fullName[0] || '');
+
+           
+          const exps = profile.experience || [];
+          const edus = profile.education || [];
+          const skills = d.top_skills || [];
+        %>
+
+        <!-- Cover + Identity -->
+        <div class="profile-card">
+          <% if (cover) { %>
+            <img src="<%= cover %>" alt="cover" class="cover-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+            <div class="cover-placeholder" style="display:none"></div>
+          <% } else { %>
+            <div class="cover-placeholder"></div>
+          <% } %>
+
+          <div class="profile-identity">
+            <div class="avatar-wrap">
+              <% if (photo) { %>
+                <img src="<%= photo %>" alt="<%= fullName %>" class="avatar"
+                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+                <div class="avatar-placeholder" style="display:none"><%= initials.toUpperCase() %></div>
+              <% } else { %>
+                <div class="avatar-placeholder"><%= initials.toUpperCase() || '?' %></div>
+              <% } %>
+              <span class="online-dot"></span>
+            </div>
+
+            <div class="profile-name"><%= fullName %></div>
+            <% if (headline) { %><div class="profile-headline"><%= headline %></div><% } %>
+
+            <div class="profile-meta-row">
+              <% if (location) { %>
+                <div class="meta-chip">📍 <span><%= location %></span></div>
+              <% } %>
+              <% if (industry) { %>
+                <div class="meta-chip">🏢 <span><%= industry %></span></div>
+              <% } %>
+              <% if (connCount) { %>
+                <div class="meta-chip">🔗 <strong><%= connCount %>+</strong>&nbsp;connections</div>
+              <% } %>
+              <% if (d.follower_count) { %>
+              <div class="meta-chip">
+                👥 <strong><%= d.follower_count %></strong> Followers
+              </div>
+              <% } %>
+              <% if (website) { %>
+                <div class="meta-chip">🌐 <a href="<%= website %>" target="_blank" style="color:var(--accent)"><%= website.replace(/^https?:\/\//, '') %></a></div>
+              <% } %>
+            </div>
+
+            <% if (openToWork) { %>
+            <div class="open-to-card" style="margin-bottom:14px; padding:10px 16px;">
+              <span class="open-to-icon">💼</span>
+              <div class="open-to-text"><strong>Open to Work</strong>Actively looking for new opportunities</div>
+            </div>
+            <% } %>
+
+            <div class="connect-row">
+              <button class="btn-connect">+ Connect</button>
+              <button class="btn-message">Message</button>
+              <button class="btn-more">• • •</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- About -->
+        <% if (summary) { %>
+        <div class="section-card">
+          <div class="section-card-title"><span class="icon">📝</span> About</div>
+          <div class="about-text"><%= summary %></div>
+        </div>
+        <% } %>
+
+          <!-- Featured -->
+        <% const featured = profile.featured || []; %>
+
+        <% if(featured.length > 0){ %>
+        <div class="section-card">
+          <div class="section-card-title">
+            <span class="icon">⭐</span> Featured
+          </div>
+
+          <div class="exp-list">
+            <% featured.forEach(item => { %>
+
+              <div class="exp-item">
+
+                <% if(item.image_url){ %>
+                  <img
+                    src="<%= item.image_url %>"
+                    style="
+                      width:140px;
+                      height:90px;
+                      object-fit:cover;
+                      border-radius:8px;
+                      margin-right:15px;
+                    "
+                  >
+                <% } %>
+
+                <div>
+                  <div class="exp-title">
+                    <%= item.title %>
+                  </div>
+
+                  <div class="exp-company">
+                    <%= item.description || '' %>
+                  </div>
+                </div>
+
+              </div>
+
+            <% }) %>
+          </div>
+
+        </div>
+        <% } %>
+
+        <!-- Experience -->
+        <% if (Array.isArray(exps) && exps.length > 0) { %>
+        <div class="section-card">
+          <div class="section-card-title"><span class="icon">💼</span> Experience</div>
+          <div class="exp-list">
+            <% exps.forEach(function(exp, i) {
+              const title = exp.title || '';
+              const company = exp.company || '';
+              const logo = exp.company_logo_url || '';
+              const start = exp.start_date?.year || '';
+              const end = exp.is_current
+                ? 'Present'
+                : (exp.end_date?.year || '');
+              const desc = exp.description || '';
+              const loc = exp.location || '';
+            %>
+            <div class="exp-item">
+              <div class="exp-logo">
+                <% if (logo) { %>
+                  <img src="<%= logo %>" alt="<%= company %>" onerror="this.parentNode.textContent='🏢'" />
+                <% } else { %>🏢<% } %>
+              </div>
+              <div class="exp-info">
+                <div class="exp-title"><%= title %></div>
+                <div class="exp-company"><%= company %><% if (loc) { %> · <%= loc %><% } %></div>
+                <div class="exp-date"><%= start %><% if (start) { %> – <% } %><%= end %></div>
+                <% if (desc) { %><div class="exp-desc"><%= desc.substring(0, 280) %><%= desc.length > 280 ? '...' : '' %></div><% } %>
+              </div>
+            </div>
+            <% if (i < exps.length - 1) { %><div class="exp-divider"></div><% } %>
+            <% }); %>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Education -->
+        <% if (Array.isArray(edus) && edus.length > 0) { %>
+        <div class="section-card">
+          <div class="section-card-title"><span class="icon">🎓</span> Education</div>
+          <% edus.forEach(function(edu) {
+            const school = edu.school || '';
+            const degree = edu.degree || '';
+            const field = edu.field_of_study || '';
+            const logo   = edu.schoolLogo  || edu.logo  || '';
+            const start = edu.start_date?.year || '';
+            const end = edu.end_date?.year || '';
+          %>
+          <div class="edu-item">
+            <div class="edu-logo">
+              <% if (logo) { %>
+                <img src="<%= logo %>" alt="<%= school %>" onerror="this.parentNode.textContent='🎓'" />
+              <% } else { %>🎓<% } %>
+            </div>
+            <div>
+              <div class="edu-school"><%= school %></div>
+              <div class="edu-degree"><%= degree %><% if (field && field !== degree) { %> · <%= field %><% } %></div>
+              <% if (start || end) { %><div class="edu-date"><%= start %><% if (start && end) { %> – <% } %><%= end %></div><% } %>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+        <% } %>
+
+        <!-- Certification section -->
+        <% const certs = profile.certifications || []; %>
+
+        <% if(certs.length){ %>
+        <div class="section-card">
+          <div class="section-card-title">
+            🏆 Certifications
+          </div>
+
+          <% certs.forEach(cert => { %>
+            <div class="edu-item">
+              <div>
+                <div class="edu-school">
+                  <%= cert.name %>
+                </div>
+
+                <div class="edu-degree">
+                  <%= cert.issuer %>
+                </div>
+
+                <div class="edu-date">
+                  <%= cert.issued_date %>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+        <% } %>
+        <!-- Skills -->
+        <% const skillList = Array.isArray(skills) ? skills : []; %>
+        <% if (skillList.length > 0) { %>
+        <div class="section-card">
+          <div class="section-card-title"><span class="icon">⚡</span> Skills</div>
+          <div class="skills-grid">
+            <% skillList.slice(0, 30).forEach(function(sk) {
+              const name = typeof sk === 'string' ? sk : (sk.name || sk.skill || sk.title || '');
+              if (name) { %>
+              <span class="skill-chip"><%= name %></span>
+            <% } }); %>
+          </div>
+        </div>
+        <% } %>
+        
+      
+        <!-- Raw data toggle -->
+        <details style="margin-top:8px;">
+          <summary style="cursor:pointer; font-family:var(--mono); font-size:12px; color:var(--text3); padding:10px 0;">
+            View raw API response
+          </summary>
+          <div class="result-panel" style="margin-top:10px;">
+            <div class="result-header">
+              <span class="result-title">Raw JSON</span>
+            </div>
+            <div class="result-body">
+              <button class="copy-btn">Copy</button>
+              <pre class="json-output"><%= JSON.stringify(profile, null, 2) %></pre>
+            </div>
+          </div>
+        </details>
+
+      <% } %>
+
+    </div>
+    </div>
+  </main>
+
+  <script src="/js/app.js"></script>
+  <script>
+    function fetchProfile() {
+      const val = document.getElementById('profile_url').value.trim();
+      if (!val) return;
+      // POST form submit
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/linkedin/profile/view';
+      const inp = document.createElement('input');
+      inp.name = 'profile_url'; inp.value = val;
+      form.appendChild(inp);
+      document.body.appendChild(form);
+      form.submit();
+    }
+    // Enter key support
+    document.getElementById('profile_url').addEventListener('keydown', e => {
+      if (e.key === 'Enter') fetchProfile();
+    });
+  </script>
+</body>
+</html>

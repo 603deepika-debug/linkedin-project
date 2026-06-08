@@ -1,0 +1,22 @@
+
+<% if (error) { %>
+  <div class="alert alert-error">
+    <span class="alert-icon">⚠</span>
+    <div><strong>API Error:</strong> <%= error %></div>
+  </div>
+<% } %>
+
+<% if (result !== null && result !== undefined) { %>
+<div class="result-panel">
+  <div class="result-header">
+    <span class="result-title">Response</span>
+    <span class="status-badge <%= status >= 200 && status < 300 ? 'status-ok' : 'status-err' %>">
+      HTTP <%= status %>
+    </span>
+  </div>
+  <div class="result-body">
+    <button class="copy-btn">Copy</button>
+    <pre class="json-output"><%= JSON.stringify(result, null, 2) %></pre>
+  </div>
+</div>
+<% } %>

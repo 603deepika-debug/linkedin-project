@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Profile — LI Scraper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <%- include('../partials/sidebar', { page: 'profile-upload' }) %>
+  <main class="main">
+    <header class="topbar">
+      <h1 class="topbar-title">Upload Profile</h1>
+      <div class="topbar-meta"><code class="endpoint-badge">POST /profile/upload</code></div>
+    </header>
+    <div class="content">
+
+      <div class="card">
+        <div class="card-title">Import by LinkedIn URL</div>
+        <div class="upload-zone">
+          <div class="upload-zone-icon">⬆</div>
+          <p>Provide a public LinkedIn profile URL to scrape and store the profile data.</p>
+          <form method="POST">
+            <div class="form-row" style="justify-content:center; max-width:600px; margin:0 auto;">
+              <div class="form-group">
+                <label for="profileUrl">LinkedIn Profile URL</label>
+                <input
+                  type="url"
+                  id="profileUrl"
+                  name="profileUrl"
+                  value="<%= profileUrl %>"
+                  placeholder="https://www.linkedin.com/in/neal-mohan"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-upload">↑ Upload</button>
+            </div>
+          </form>
+        </div>
+        <div style="margin-top:12px; padding:12px 16px; background:var(--bg3); border-radius:6px; border:1px solid var(--border);">
+          <p style="font-family:var(--mono); font-size:11px; color:var(--text3);">
+            Example URLs: <code style="color:var(--accent2)">https://www.linkedin.com/in/neal-mohan</code> &nbsp;·&nbsp;
+            <code style="color:var(--accent2)">https://linkedin.com/in/satya-nadella</code>
+          </p>
+        </div>
+      </div>
+
+      <%- include('../partials/result', { result, status, error }) %>
+
+    </div>
+  </main>
+  <script src="/js/app.js"></script>
+</body>
+</html>

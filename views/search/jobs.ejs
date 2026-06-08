@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Jobs — LI Scraper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <%- include('../partials/sidebar', { page: 'search-jobs' }) %>
+  <main class="main">
+    <header class="topbar">
+      <h1 class="topbar-title">Search Jobs</h1>
+      <div class="topbar-meta"><code class="endpoint-badge">GET /search/jobs</code></div>
+    </header>
+    <div class="content">
+      <div class="card">
+        <div class="card-title">Parameters</div>
+        <form method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="keyword">Search Keyword</label>
+              <input type="text" id="keyword" name="keyword" value="<%= keyword %>" placeholder="e.g. Product Manager" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Fetch →</button>
+          </div>
+        </form>
+      </div>
+      <%- include('../partials/result', { result, status, error }) %>
+    </div>
+  </main>
+  <script src="/js/app.js"></script>
+</body>
+</html>
