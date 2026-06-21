@@ -198,39 +198,53 @@ Fetch →
 
 <% if(result){ %>
 
-
 <%
 
 const data = result.data?.profile || result.data || {};
 
-const name = 
-data.full_name ||
+
+const name =
+data.firstName
+? data.firstName + " " + (data.lastName || "")
+:
+data.first_name
+? data.first_name + " " + (data.last_name || "")
+:
 data.fullname ||
-(data.first_name ? data.first_name + " " + data.last_name : "Unknown");
+data.full_name ||
+"Unknown User";
 
 
 const photo =
 data.profile_picture ||
 data.profile_picture_url ||
-data.photo;
+data.photo ||
+data.profilePicture ||
+"";
 
 
 const headline =
 data.headline ||
 data.title ||
 data.position ||
+data.headline_text ||
 "";
 
 
 const location =
+data.location?.full ||
 data.location ||
 data.city ||
 "";
-const about = data.summary || data.about || "";
+
+
+const about =
+data.summary ||
+data.about ||
+data.description ||
+"";
 
 %>
-
-
 
 
 <div class="profile-card">
@@ -276,6 +290,17 @@ class="avatar"
 <%= headline %>
 
 </div>
+
+
+<% if(about){ %>
+
+<div class="about">
+
+<%= about %>
+
+</div>
+
+<% } %>
 
 
 

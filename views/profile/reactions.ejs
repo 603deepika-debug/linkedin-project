@@ -361,13 +361,9 @@ onerror="this.style.display='none'"
 
 
 <%= 
-
-item.reacter?.name ||
-item.user?.name ||
-item.author?.name ||
-item.name ||
-'Unknown User'
-
+item.author?.firstName 
+? item.author.firstName + " " + (item.author.lastName || '')
+: 'Unknown User'
 %>
 
 
@@ -377,15 +373,7 @@ item.name ||
 
 <div class="reaction-headline">
 
-
-<%=
-
-item.reacter?.subtitle ||
-item.user?.headline ||
-item.author?.headline ||
-''
-
-%>
+<%= item.author?.headline || '' %>
 
 
 </div>
@@ -398,7 +386,7 @@ class="linkedin-link"
 
 target="_blank"
 
-href="<%= item.reacter?.linkedin_url || item.user?.linkedin_url %>">
+href="<%= item.author?.profile_url || '#' %>">
 
 
 View Profile
@@ -486,14 +474,20 @@ item.text ||
 
 <span>
 
+<span>
+
 ❤️ 
 
+<%= 
 item.post?.post_stats?.total_reactions ||
 item.stats?.total_reactions ||
 item.total_reactions ||
 0
+%>
 
 Reactions
+
+</span>
 
 </span>
 
