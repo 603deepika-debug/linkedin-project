@@ -33,7 +33,6 @@ padding:20px;
 
 margin-top:20px;
 
-
 }
 
 
@@ -46,21 +45,21 @@ gap:15px;
 
 align-items:center;
 
-
 }
 
 
 
 .reaction-avatar{
 
-width:55px;
+width:60px;
 
-height:55px;
+height:60px;
 
 border-radius:50%;
 
 object-fit:cover;
 
+background:#ddd;
 
 }
 
@@ -68,10 +67,9 @@ object-fit:cover;
 
 .reaction-name{
 
-font-size:16px;
+font-size:17px;
 
 font-weight:700;
-
 
 }
 
@@ -79,12 +77,21 @@ font-weight:700;
 
 .reaction-headline{
 
-font-size:12px;
+font-size:13px;
 
 color:var(--text3);
 
-margin-top:4px;
+margin-top:5px;
 
+}
+
+
+
+.linkedin-link{
+
+color:var(--accent);
+
+font-size:13px;
 
 }
 
@@ -94,16 +101,15 @@ margin-top:4px;
 
 margin-top:15px;
 
-display:inline-block;
-
 background:var(--bg3);
 
-padding:6px 12px;
+display:inline-block;
+
+padding:8px 15px;
 
 border-radius:20px;
 
-font-size:12px;
-
+font-size:13px;
 
 }
 
@@ -117,12 +123,11 @@ background:var(--bg3);
 
 padding:15px;
 
-border-radius:8px;
+border-radius:10px;
 
-font-size:13px;
+font-size:14px;
 
 line-height:1.5;
-
 
 }
 
@@ -134,23 +139,11 @@ margin-top:15px;
 
 display:flex;
 
-gap:20px;
-
-font-size:12px;
-
-color:var(--text3);
-
-
-}
-
-
-
-.linkedin-link{
-
-color:var(--accent);
+gap:25px;
 
 font-size:13px;
 
+color:var(--text3);
 
 }
 
@@ -163,7 +156,9 @@ font-size:13px;
 
 
 
+
 <body>
+
 
 
 <%- include('../partials/sidebar', { page:'profile-reactions' }) %>
@@ -178,7 +173,9 @@ font-size:13px;
 
 
 <h1 class="topbar-title">
+
 Profile Reactions
+
 </h1>
 
 
@@ -198,6 +195,7 @@ GET /profile/reactions
 
 
 
+
 <div class="content">
 
 
@@ -208,7 +206,9 @@ GET /profile/reactions
 
 
 <div class="card-title">
+
 Parameters
+
 </div>
 
 
@@ -219,12 +219,13 @@ Parameters
 <div class="form-row">
 
 
-
 <div class="form-group">
 
 
 <label>
+
 LinkedIn Profile URL
+
 </label>
 
 
@@ -232,8 +233,6 @@ LinkedIn Profile URL
 <input
 
 type="text"
-
-id="profile_url"
 
 name="profile_url"
 
@@ -250,13 +249,11 @@ required
 
 
 
-
-<button type="submit" class="btn btn-primary">
+<button class="btn btn-primary">
 
 Fetch →
 
 </button>
-
 
 
 </div>
@@ -266,7 +263,6 @@ Fetch →
 
 
 </div>
-
 
 
 
@@ -292,23 +288,18 @@ Fetch →
 
 
 
-
 <%
 
 let reactions = [];
 
 if(result){
 
-  reactions =
-  result.data?.reactions ||
-  result.data?.items ||
-  result.data?.results ||
-  result.reactions ||
-  [];
+reactions = result.data?.reactions || [];
 
 }
 
 %>
+
 
 
 
@@ -337,19 +328,14 @@ if(result){
 
 <img
 
-src="<%= 
-item.reacter?.profile_picture ||
-item.user?.profile_picture ||
-item.author?.profile_picture ||
-''
-
-%>"
+src="<%= item.author?.profile_picture || '' %>"
 
 class="reaction-avatar"
 
 onerror="this.style.display='none'"
 
 />
+
 
 
 
@@ -361,9 +347,20 @@ onerror="this.style.display='none'"
 
 
 <%= 
-item.author?.firstName 
-? item.author.firstName + " " + (item.author.lastName || '')
-: 'Unknown User'
+
+(item.author?.firstName || '') 
+
++ 
+
+" " 
+
++
+
+(item.author?.lastName || '')
+
+|| 'Unknown User'
+
+
 %>
 
 
@@ -373,6 +370,7 @@ item.author?.firstName
 
 <div class="reaction-headline">
 
+
 <%= item.author?.headline || '' %>
 
 
@@ -380,13 +378,14 @@ item.author?.firstName
 
 
 
-<a
+
+<a 
 
 class="linkedin-link"
 
-target="_blank"
+href="<%= item.author?.profile_url || '#' %>"
 
-href="<%= item.author?.profile_url || '#' %>">
+target="_blank">
 
 
 View Profile
@@ -395,7 +394,9 @@ View Profile
 </a>
 
 
+
 </div>
+
 
 
 </div>
@@ -413,16 +414,11 @@ View Profile
 
 ❤️ 
 
-<%=
+<%= item.action || 'Reaction' %>
 
-item.reaction_type ||
-item.type ||
-item.reaction ||
-'Reaction'
-
-%>
 
 </div>
+
 
 
 
@@ -441,26 +437,22 @@ Post
 </strong>
 
 
+
 <p>
 
-<%=
 
-(
-item.post?.post_text ||
-item.post?.text ||
-item.text ||
-''
+<%= 
 
-).substring(0,300)
+item.text ? item.text.substring(0,300) : ''
 
 %>
 
-...
 
-</p>
+...</p>
 
 
 </div>
+
 
 
 
@@ -472,22 +464,14 @@ item.text ||
 <div class="stats">
 
 
-<span>
 
 <span>
 
 ❤️ 
 
-<%= 
-item.post?.post_stats?.total_reactions ||
-item.stats?.total_reactions ||
-item.total_reactions ||
-0
-%>
+<%= item.post_stats?.totalReactionCount || 0 %>
 
 Reactions
-
-</span>
 
 </span>
 
@@ -498,7 +482,7 @@ Reactions
 
 💬
 
-<%= item.post?.post_stats?.comments || 0 %>
+<%= item.post_stats?.comments || 0 %>
 
 Comments
 
@@ -507,12 +491,11 @@ Comments
 
 
 
-
 <span>
 
 🕒
 
-<%= item.created_at?.relative || '' %>
+<%= item.timestamps?.relative || '' %>
 
 </span>
 
@@ -524,16 +507,14 @@ Comments
 
 
 
-
-
 </div>
 
 
 
 
 
-<% }) %>
 
+<% }) %>
 
 
 
@@ -559,11 +540,12 @@ No reactions found
 
 
 
-
 </div>
 
 
+
 </main>
+
 
 
 
