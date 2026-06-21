@@ -1,36 +1,498 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Search Jobs — LI Scraper</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/app.css" />
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Search Jobs — LI Scraper</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/app.css" />
+
+
+
+<style>
+
+
+.job-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+
+gap:20px;
+
+margin-top:25px;
+
+}
+
+
+
+.job-card{
+
+background:var(--bg2);
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+padding:22px;
+
+transition:.2s;
+
+}
+
+
+
+.job-card:hover{
+
+transform:translateY(-5px);
+
+border-color:var(--accent);
+
+box-shadow:var(--shadow);
+
+}
+
+
+
+.job-title{
+
+font-size:18px;
+
+font-weight:800;
+
+margin-bottom:10px;
+
+}
+
+
+
+.job-company{
+
+color:var(--accent);
+
+font-size:14px;
+
+margin-bottom:12px;
+
+}
+
+
+
+.job-desc{
+
+font-size:13px;
+
+color:var(--text2);
+
+line-height:1.6;
+
+margin-bottom:15px;
+
+}
+
+
+
+.job-info{
+
+font-size:13px;
+
+color:var(--text3);
+
+margin-top:8px;
+
+}
+
+
+
+.job-link{
+
+display:inline-block;
+
+margin-top:18px;
+
+color:var(--accent);
+
+font-family:var(--mono);
+
+font-size:12px;
+
+text-decoration:none;
+
+}
+
+
+
+.job-link:hover{
+
+text-decoration:underline;
+
+}
+
+
+</style>
+
+
+
 </head>
+
+
+
+
 <body>
-  <%- include('../partials/sidebar', { page: 'search-jobs' }) %>
-  <main class="main">
-    <header class="topbar">
-      <h1 class="topbar-title">Search Jobs</h1>
-      <div class="topbar-meta"><code class="endpoint-badge">GET /search/jobs</code></div>
-    </header>
-    <div class="content">
-      <div class="card">
-        <div class="card-title">Parameters</div>
-        <form method="POST">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="keyword">Search Keyword</label>
-              <input type="text" id="keyword" name="keyword" value="<%= keyword %>" placeholder="e.g. Product Manager" required />
-            </div>
-            <button type="submit" class="btn btn-primary">Fetch →</button>
-          </div>
-        </form>
-      </div>
-      <%- include('../partials/result', { result, status, error }) %>
-    </div>
-  </main>
-  <script src="/js/app.js"></script>
+
+
+
+<%- include('../partials/sidebar', { page:'search-jobs' }) %>
+
+
+
+
+<main class="main">
+
+
+<header class="topbar">
+
+
+<h1 class="topbar-title">
+
+Search Jobs
+
+</h1>
+
+
+
+<div class="topbar-meta">
+
+
+<code class="endpoint-badge">
+
+GET /search/jobs
+
+</code>
+
+
+</div>
+
+
+
+</header>
+
+
+
+
+
+
+
+<div class="content">
+
+
+
+
+
+
+<div class="card">
+
+
+<div class="card-title">
+
+Parameters
+
+</div>
+
+
+
+
+
+<form method="POST">
+
+
+
+<div class="form-row">
+
+
+
+<div class="form-group">
+
+
+<label>
+
+Search Keyword
+
+</label>
+
+
+
+<input
+
+type="text"
+
+name="keyword"
+
+value="<%= keyword || '' %>"
+
+placeholder="e.g. Product Manager"
+
+required
+
+/>
+
+
+
+</div>
+
+
+
+
+<button class="btn btn-primary">
+
+Fetch →
+
+</button>
+
+
+
+</div>
+
+
+
+</form>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<% if(error){ %>
+
+
+<div class="alert alert-error">
+
+
+⚠ <%= error %>
+
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+
+<% if(result){ %>
+
+
+
+<%
+
+let jobs = 
+result.data?.jobs ||
+result.data?.results ||
+result.jobs ||
+[];
+
+%>
+
+
+
+
+
+
+
+<div class="job-grid">
+
+
+
+
+
+
+
+<% jobs.forEach(job=>{ %>
+
+
+
+
+
+
+
+<div class="job-card">
+
+
+
+
+
+
+<div class="job-title">
+
+
+<%= job.title || job.job_title || "Job Title" %>
+
+
+</div>
+
+
+
+
+
+
+<div class="job-company">
+
+
+🏢 
+
+<%= job.company || job.company_name || "Company" %>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="job-desc">
+
+
+<%=
+
+(job.description || job.job_description || "")
+
+.substring(0,150)
+
+%>
+
+
+...</div>
+
+
+
+
+
+
+
+
+<div class="job-info">
+
+
+📍 
+
+<%= job.location || "Location not available" %>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="job-info">
+
+
+💼 
+
+<%= job.job_type || job.type || "Job Type" %>
+
+
+</div>
+
+
+
+
+
+
+
+
+<a
+
+href="<%= job.job_url || job.url || '#' %>"
+
+target="_blank"
+
+class="job-link">
+
+
+View Job →
+
+
+</a>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<% }) %>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<% } %>
+
+
+
+
+
+
+
+</div>
+
+
+</main>
+
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
 </body>
+
+
 </html>
