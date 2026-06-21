@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>Profile Reactions — LI Scraper</title>
+<meta charset="UTF-8">
 
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 
-<link rel="stylesheet" href="/css/app.css" />
+<title>Profile Reactions</title>
+
+
+<link rel="stylesheet" href="/css/app.css">
 
 
 
@@ -27,17 +26,18 @@ background:var(--bg2);
 
 border:1px solid var(--border);
 
-border-radius:12px;
-
 padding:20px;
 
+border-radius:15px;
+
 margin-top:20px;
+
 
 }
 
 
 
-.reaction-header{
+.header{
 
 display:flex;
 
@@ -45,15 +45,16 @@ gap:15px;
 
 align-items:center;
 
+
 }
 
 
 
-.reaction-avatar{
-
-width:60px;
+.avatar{
 
 height:60px;
+
+width:60px;
 
 border-radius:50%;
 
@@ -65,57 +66,46 @@ background:#ddd;
 
 
 
-.reaction-name{
-
-font-size:17px;
+.name{
 
 font-weight:700;
 
+font-size:18px;
+
+
 }
 
 
 
-.reaction-headline{
+.headline{
 
 font-size:13px;
 
-color:var(--text3);
-
-margin-top:5px;
+color:gray;
 
 }
 
 
 
-.linkedin-link{
-
-color:var(--accent);
-
-font-size:13px;
-
-}
-
-
-
-.reaction-type{
+.reaction{
 
 margin-top:15px;
 
 background:var(--bg3);
 
-display:inline-block;
-
-padding:8px 15px;
+padding:10px;
 
 border-radius:20px;
 
-font-size:13px;
+display:inline-block;
+
 
 }
 
 
 
-.post-box{
+.post{
+
 
 margin-top:15px;
 
@@ -125,9 +115,8 @@ padding:15px;
 
 border-radius:10px;
 
-font-size:14px;
-
 line-height:1.5;
+
 
 }
 
@@ -135,15 +124,16 @@ line-height:1.5;
 
 .stats{
 
-margin-top:15px;
-
 display:flex;
 
-gap:25px;
+gap:20px;
 
-font-size:13px;
+margin-top:15px;
 
-color:var(--text3);
+color:gray;
+
+font-size:14px;
+
 
 }
 
@@ -161,7 +151,8 @@ color:var(--text3);
 
 
 
-<%- include('../partials/sidebar', { page:'profile-reactions' }) %>
+<%- include('../partials/sidebar',{page:'profile-reactions'}) %>
+
 
 
 
@@ -179,18 +170,9 @@ Profile Reactions
 </h1>
 
 
-<div class="topbar-meta">
-
-<code class="endpoint-badge">
-
-GET /profile/reactions
-
-</code>
-
-</div>
-
-
 </header>
+
+
 
 
 
@@ -205,48 +187,20 @@ GET /profile/reactions
 <div class="card">
 
 
-<div class="card-title">
-
-Parameters
-
-</div>
-
-
-
-<form method="POST" action="/linkedin/profile/reactions">
-
-
-<div class="form-row">
-
-
-<div class="form-group">
-
-
-<label>
-
-LinkedIn Profile URL
-
-</label>
-
+<form method="POST">
 
 
 <input
 
-type="text"
-
 name="profile_url"
+
+placeholder="Linkedin profile url"
 
 value="<%= profile_url || '' %>"
 
-placeholder="https://www.linkedin.com/in/satya-nadella"
-
 required
 
-/>
-
-
-</div>
-
+>
 
 
 <button class="btn btn-primary">
@@ -254,9 +208,6 @@ required
 Fetch →
 
 </button>
-
-
-</div>
 
 
 </form>
@@ -270,36 +221,22 @@ Fetch →
 
 
 
-<% if(error){ %>
-
-
-<div class="alert alert-error">
-
-<%= error %>
-
-</div>
-
-
-<% } %>
-
-
-
-
-
 
 
 <%
 
-let reactions = [];
+let reactions=[];
+
 
 if(result){
 
-reactions = result.data?.reactions || [];
+reactions =
+result.data?.reactions || [];
 
 }
 
-%>
 
+%>
 
 
 
@@ -320,7 +257,7 @@ reactions = result.data?.reactions || [];
 
 
 
-<div class="reaction-header">
+<div class="header">
 
 
 
@@ -330,11 +267,10 @@ reactions = result.data?.reactions || [];
 
 src="<%= item.author?.profile_picture || '' %>"
 
-class="reaction-avatar"
-
-onerror="this.style.display='none'"
+class="avatar"
 
 />
+
 
 
 
@@ -343,60 +279,29 @@ onerror="this.style.display='none'"
 <div>
 
 
-<div class="reaction-name">
+<div class="name">
 
 
-<%= 
+<%= item.author?.firstName %>
 
-(item.author?.firstName || '') 
-
-+ 
-
-" " 
-
-+
-
-(item.author?.lastName || '')
-
-|| 'Unknown User'
-
-
-%>
+<%= item.author?.lastName %>
 
 
 </div>
 
 
 
-<div class="reaction-headline">
+<div class="headline">
 
 
-<%= item.author?.headline || '' %>
-
-
-</div>
-
-
-
-
-<a 
-
-class="linkedin-link"
-
-href="<%= item.author?.profile_url || '#' %>"
-
-target="_blank">
-
-
-View Profile
-
-
-</a>
-
+<%= item.author?.headline %>
 
 
 </div>
 
+
+
+</div>
 
 
 </div>
@@ -407,15 +312,10 @@ View Profile
 
 
 
+<div class="reaction">
 
 
-<div class="reaction-type">
-
-
-❤️ 
-
-<%= item.action || 'Reaction' %>
-
+❤️ <%= item.action %>
 
 </div>
 
@@ -425,9 +325,7 @@ View Profile
 
 
 
-
-
-<div class="post-box">
+<div class="post">
 
 
 <strong>
@@ -437,16 +335,9 @@ Post
 </strong>
 
 
-
 <p>
 
-
-<%= 
-
-item.text ? item.text.substring(0,300) : ''
-
-%>
-
+<%= item.text.substring(0,300) %>
 
 ...</p>
 
@@ -459,22 +350,18 @@ item.text ? item.text.substring(0,300) : ''
 
 
 
-
-
 <div class="stats">
-
 
 
 <span>
 
-❤️ 
+❤️
 
 <%= item.post_stats?.totalReactionCount || 0 %>
 
-Reactions
+Likes
 
 </span>
-
 
 
 
@@ -490,12 +377,11 @@ Comments
 
 
 
-
 <span>
 
 🕒
 
-<%= item.timestamps?.relative || '' %>
+<%= item.timestamps?.relative || "" %>
 
 </span>
 
@@ -507,6 +393,7 @@ Comments
 
 
 
+
 </div>
 
 
@@ -514,8 +401,8 @@ Comments
 
 
 
-<% }) %>
 
+<% }) %>
 
 
 
@@ -543,14 +430,8 @@ No reactions found
 </div>
 
 
-
 </main>
 
-
-
-
-
-<script src="/js/app.js"></script>
 
 
 </body>

@@ -3,44 +3,33 @@
 
 <head>
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Profile Detail — LI Scraper</title>
+<title>Profile Detail</title>
 
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
-
-
-<link rel="stylesheet" href="/css/app.css" />
+<link rel="stylesheet" href="/css/app.css">
 
 
 <style>
 
-
 .profile-card{
 
 background:var(--bg2);
-
 border:1px solid var(--border);
-
-border-radius:12px;
-
+border-radius:15px;
 overflow:hidden;
-
-margin-top:20px;
+margin-top:25px;
 
 }
-
 
 
 .cover{
 
 height:170px;
 
-background:linear-gradient(135deg,#0a3d8f,#0a84ff,#00d4aa);
+background:
+linear-gradient(135deg,#0066ff,#00d4aa);
 
 }
 
@@ -54,7 +43,6 @@ padding:25px;
 
 
 
-
 .avatar{
 
 width:110px;
@@ -63,11 +51,11 @@ height:110px;
 
 border-radius:50%;
 
-border:4px solid white;
+border:5px solid white;
 
 object-fit:cover;
 
-margin-top:-65px;
+margin-top:-70px;
 
 background:#ddd;
 
@@ -75,10 +63,9 @@ background:#ddd;
 
 
 
-
 .name{
 
-font-size:26px;
+font-size:28px;
 
 font-weight:800;
 
@@ -88,31 +75,31 @@ margin-top:15px;
 
 
 
-
 .headline{
 
 margin-top:8px;
 
-font-size:15px;
-
 color:var(--text2);
 
-line-height:1.5;
+font-size:15px;
 
 }
 
 
 
+.about-box{
 
-.about{
 
-margin-top:15px;
+margin-top:20px;
 
-font-size:14px;
+background:var(--bg3);
+
+padding:20px;
+
+border-radius:12px;
 
 line-height:1.6;
 
-color:var(--text2);
 
 }
 
@@ -120,13 +107,13 @@ color:var(--text2);
 
 .info{
 
-margin-top:20px;
-
 display:flex;
 
 gap:15px;
 
 flex-wrap:wrap;
+
+margin-top:20px;
 
 }
 
@@ -134,58 +121,19 @@ flex-wrap:wrap;
 
 .info span{
 
+
 background:var(--bg3);
 
-padding:8px 15px;
+padding:10px 15px;
 
 border-radius:20px;
 
-font-size:13px;
-
-}
-
-
-
-.section{
-
-background:var(--bg2);
-
-border:1px solid var(--border);
-
-border-radius:12px;
-
-padding:20px;
-
-margin-top:20px;
-
-}
-
-
-
-.section h2{
-
-font-size:18px;
-
-margin-bottom:10px;
-
-}
-
-
-
-pre{
-
-white-space:pre-wrap;
-
-font-size:12px;
-
-overflow:auto;
 
 }
 
 
 
 </style>
-
 
 
 </head>
@@ -195,7 +143,7 @@ overflow:auto;
 <body>
 
 
-<%- include('../partials/sidebar', { page:'profile-detail' }) %>
+<%- include('../partials/sidebar',{page:'profile-detail'}) %>
 
 
 
@@ -205,13 +153,11 @@ overflow:auto;
 
 <header class="topbar">
 
-
 <h1 class="topbar-title">
 
 Profile Detail
 
 </h1>
-
 
 
 <div class="topbar-meta">
@@ -224,8 +170,8 @@ GET /profile/detail
 
 </div>
 
-
 </header>
+
 
 
 
@@ -253,7 +199,6 @@ Parameters
 <div class="form-row">
 
 
-
 <div class="form-group">
 
 
@@ -264,7 +209,6 @@ LinkedIn Profile URL
 </label>
 
 
-
 <input
 
 type="text"
@@ -273,16 +217,14 @@ name="profile_url"
 
 value="<%= profile_url || '' %>"
 
-placeholder="https://www.linkedin.com/in/profile"
+placeholder="https://linkedin.com/in/profile"
 
 required
 
-/>
-
+>
 
 
 </div>
-
 
 
 <button class="btn btn-primary">
@@ -292,18 +234,13 @@ Fetch →
 </button>
 
 
-
 </div>
-
 
 
 </form>
 
 
-
 </div>
-
-
 
 
 
@@ -314,15 +251,12 @@ Fetch →
 
 <div class="alert alert-error">
 
-⚠ <%= error %>
+<%= error %>
 
 </div>
 
 
 <% } %>
-
-
-
 
 
 
@@ -338,42 +272,28 @@ Fetch →
 const data = result.data?.basic_info || {};
 
 
-
 const name =
-
-data.fullname ||
-
-(data.first_name + " " + data.last_name);
+data.fullname || "Unknown User";
 
 
-
-const photo =
-
+const image =
 data.profile_picture_url || "";
 
 
-
 const headline =
-
 data.headline || "";
 
 
+const about =
+data.about || "";
+
 
 const location =
-
 data.location?.full || "";
 
 
 
-const about =
-
-data.about || "";
-
-
-
 %>
-
-
 
 
 
@@ -395,12 +315,9 @@ data.about || "";
 
 
 
-<% if(photo){ %>
-
-
 <img
 
-src="<%= photo %>"
+src="<%= image %>"
 
 class="avatar"
 
@@ -409,14 +326,6 @@ onerror="this.style.display='none'"
 />
 
 
-<% }else{ %>
-
-
-<div class="avatar"></div>
-
-
-<% } %>
-
 
 
 
@@ -424,7 +333,21 @@ onerror="this.style.display='none'"
 
 <div class="name">
 
-<%= name || "Unknown User" %>
+
+<%= name %>
+
+
+</div>
+
+
+
+
+
+<div class="headline">
+
+
+<%= headline %>
+
 
 </div>
 
@@ -433,9 +356,54 @@ onerror="this.style.display='none'"
 
 
 
-<div class="headline">
 
-<%= headline %>
+<div class="info">
+
+
+<% if(location){ %>
+
+
+<span>
+
+📍 <%= location %>
+
+</span>
+
+
+<% } %>
+
+
+
+
+<% if(data.is_creator){ %>
+
+
+<span>
+
+⭐ Creator
+
+</span>
+
+
+<% } %>
+
+
+
+
+
+<% if(data.open_to_work){ %>
+
+
+<span>
+
+🟢 Open To Work
+
+</span>
+
+
+<% } %>
+
+
 
 </div>
 
@@ -449,81 +417,14 @@ onerror="this.style.display='none'"
 <% if(about){ %>
 
 
-<div class="about">
-
-<%= about %>
-
-</div>
+<div class="about-box">
 
 
-<% } %>
-
-
-
-
-
-
-
-<div class="info">
-
-
-
-
-
-<% if(location){ %>
-
-<span>
-
-📍 <%= location %>
-
-</span>
-
-<% } %>
-
-
-
-
-
-
-<% if(data.is_creator){ %>
-
-<span>
-
-⭐ Creator
-
-</span>
-
-<% } %>
-
-
-
-
-
-
-<% if(data.open_to_work){ %>
-
-<span>
-
-🟢 Open To Work
-
-</span>
-
-<% } %>
-
-</div>
-</div>
-
-
-</div>
-
-<div class="section">
-
-
-<h2>
+<h3>
 
 📝 About
 
-</h2>
+</h3>
 
 
 <p>
@@ -533,9 +434,31 @@ onerror="this.style.display='none'"
 </p>
 
 
+
 </div>
 
+
+
 <% } %>
+
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<% } %>
+
+
+
 
 
 </div>
@@ -543,12 +466,6 @@ onerror="this.style.display='none'"
 
 
 </main>
-
-
-
-
-<script src="/js/app.js"></script>
-
 
 
 </body>
