@@ -8,28 +8,38 @@
 
 <title>Profile Detail</title>
 
+
 <link rel="stylesheet" href="/css/app.css">
 
 
 <style>
 
+
 .profile-card{
 
 background:var(--bg2);
+
 border:1px solid var(--border);
+
 border-radius:15px;
+
 overflow:hidden;
+
 margin-top:25px;
 
 }
+
 
 
 .cover{
 
 height:170px;
 
-background:
-linear-gradient(135deg,#0066ff,#00d4aa);
+background:linear-gradient(
+135deg,
+#0066ff,
+#00d4aa
+);
 
 }
 
@@ -79,27 +89,9 @@ margin-top:15px;
 
 margin-top:8px;
 
-color:var(--text2);
+color:#aaa;
 
 font-size:15px;
-
-}
-
-
-
-.about-box{
-
-
-margin-top:20px;
-
-background:var(--bg3);
-
-padding:20px;
-
-border-radius:12px;
-
-line-height:1.6;
-
 
 }
 
@@ -111,9 +103,9 @@ display:flex;
 
 gap:15px;
 
-flex-wrap:wrap;
-
 margin-top:20px;
+
+flex-wrap:wrap;
 
 }
 
@@ -121,12 +113,28 @@ margin-top:20px;
 
 .info span{
 
-
 background:var(--bg3);
 
 padding:10px 15px;
 
 border-radius:20px;
+
+}
+
+
+
+.about-box{
+
+
+background:var(--bg3);
+
+padding:20px;
+
+border-radius:12px;
+
+margin-top:25px;
+
+line-height:1.6;
 
 
 }
@@ -143,6 +151,7 @@ border-radius:20px;
 <body>
 
 
+
 <%- include('../partials/sidebar',{page:'profile-detail'}) %>
 
 
@@ -153,6 +162,7 @@ border-radius:20px;
 
 <header class="topbar">
 
+
 <h1 class="topbar-title">
 
 Profile Detail
@@ -162,13 +172,16 @@ Profile Detail
 
 <div class="topbar-meta">
 
+
 <code class="endpoint-badge">
 
 GET /profile/detail
 
 </code>
 
+
 </div>
+
 
 </header>
 
@@ -193,10 +206,13 @@ Parameters
 
 
 
+
 <form method="POST">
 
 
+
 <div class="form-row">
+
 
 
 <div class="form-group">
@@ -209,6 +225,7 @@ LinkedIn Profile URL
 </label>
 
 
+
 <input
 
 type="text"
@@ -217,14 +234,16 @@ name="profile_url"
 
 value="<%= profile_url || '' %>"
 
-placeholder="https://linkedin.com/in/profile"
+placeholder="https://linkedin.com/in/example"
 
 required
 
 >
 
 
+
 </div>
+
 
 
 <button class="btn btn-primary">
@@ -234,13 +253,17 @@ Fetch →
 </button>
 
 
+
 </div>
 
 
 </form>
 
 
+
 </div>
+
+
 
 
 
@@ -263,33 +286,16 @@ Fetch →
 
 
 
+
+
+
 <% if(result){ %>
 
 
 <%
 
 
-const data = result.data?.basic_info || {};
-
-
-const name =
-data.fullname || "Unknown User";
-
-
-const image =
-data.profile_picture_url || "";
-
-
-const headline =
-data.headline || "";
-
-
-const about =
-data.about || "";
-
-
-const location =
-data.location?.full || "";
+const data = result.data.basic_info;
 
 
 
@@ -308,8 +314,8 @@ data.location?.full || "";
 
 
 
-
 <div class="profile-body">
+
 
 
 
@@ -317,11 +323,9 @@ data.location?.full || "";
 
 <img
 
-src="<%= image %>"
+src="<%= data.profile_picture_url %>"
 
 class="avatar"
-
-onerror="this.style.display='none'"
 
 />
 
@@ -329,13 +333,9 @@ onerror="this.style.display='none'"
 
 
 
-
-
 <div class="name">
 
-
-<%= name %>
-
+<%= data.fullname %>
 
 </div>
 
@@ -346,7 +346,7 @@ onerror="this.style.display='none'"
 <div class="headline">
 
 
-<%= headline %>
+<%= data.headline %>
 
 
 </div>
@@ -360,39 +360,15 @@ onerror="this.style.display='none'"
 <div class="info">
 
 
-<% if(location){ %>
-
-
 <span>
 
-📍 <%= location %>
+📍 <%= data.location.full %>
 
 </span>
-
-
-<% } %>
-
-
-
-
-<% if(data.is_creator){ %>
-
-
-<span>
-
-⭐ Creator
-
-</span>
-
-
-<% } %>
-
-
 
 
 
 <% if(data.open_to_work){ %>
-
 
 <span>
 
@@ -414,8 +390,6 @@ onerror="this.style.display='none'"
 
 
 
-<% if(about){ %>
-
 
 <div class="about-box">
 
@@ -429,17 +403,13 @@ onerror="this.style.display='none'"
 
 <p>
 
-<%= about %>
+<%= data.about %>
 
 </p>
 
 
-
 </div>
 
-
-
-<% } %>
 
 
 
@@ -456,6 +426,8 @@ onerror="this.style.display='none'"
 
 
 <% } %>
+
+
 
 
 
@@ -466,6 +438,7 @@ onerror="this.style.display='none'"
 
 
 </main>
+
 
 
 </body>
