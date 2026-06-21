@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-
 <meta charset="UTF-8">
 
-<title>Profile Reactions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Profile Reactions — LI Scraper</title>
 
 
 <link rel="stylesheet" href="/css/app.css">
+
 
 
 <style>
@@ -18,10 +21,56 @@
 .reaction-card{
 
 background:var(--bg2);
+
 border:1px solid var(--border);
+
 border-radius:15px;
+
 padding:20px;
+
 margin-top:20px;
+
+}
+
+
+
+.form-box{
+
+background:var(--bg2);
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+padding:20px;
+
+}
+
+
+
+.form-box form{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+
+
+.form-box input{
+
+width:500px;
+
+padding:14px;
+
+border-radius:8px;
+
+border:1px solid var(--border);
+
+font-size:14px;
 
 }
 
@@ -30,7 +79,9 @@ margin-top:20px;
 .user{
 
 display:flex;
+
 gap:15px;
+
 align-items:center;
 
 }
@@ -40,9 +91,14 @@ align-items:center;
 .avatar{
 
 width:60px;
+
 height:60px;
+
 border-radius:50%;
+
 object-fit:cover;
+
+background:#ddd;
 
 }
 
@@ -51,6 +107,7 @@ object-fit:cover;
 .name{
 
 font-size:18px;
+
 font-weight:700;
 
 }
@@ -59,8 +116,11 @@ font-weight:700;
 
 .headline{
 
-color:#999;
 font-size:13px;
+
+color:#999;
+
+margin-top:5px;
 
 }
 
@@ -68,11 +128,19 @@ font-size:13px;
 
 .action{
 
+
 margin-top:15px;
+
 background:var(--bg3);
-padding:10px;
+
+padding:10px 15px;
+
 border-radius:20px;
+
 display:inline-block;
+
+font-size:13px;
+
 
 }
 
@@ -81,10 +149,17 @@ display:inline-block;
 
 .post{
 
+
 margin-top:15px;
+
 background:var(--bg3);
+
 padding:15px;
+
 border-radius:10px;
+
+line-height:1.6;
+
 
 }
 
@@ -92,10 +167,31 @@ border-radius:10px;
 
 .stats{
 
+
 display:flex;
-gap:20px;
+
+gap:25px;
+
 margin-top:15px;
+
 color:#aaa;
+
+font-size:13px;
+
+
+}
+
+
+
+
+.link{
+
+
+color:#38bdf8;
+
+font-size:13px;
+
+text-decoration:none;
 
 }
 
@@ -104,18 +200,24 @@ color:#aaa;
 </style>
 
 
+
 </head>
+
 
 
 
 <body>
 
 
+
 <%- include('../partials/sidebar',{page:'profile-reactions'}) %>
 
 
 
+
 <main class="main">
+
+
 
 
 <header class="topbar">
@@ -128,7 +230,25 @@ Profile Reactions
 </h1>
 
 
+
+<div class="topbar-meta">
+
+
+<code class="endpoint-badge">
+
+GET /profile/reactions
+
+</code>
+
+
+</div>
+
+
+
 </header>
+
+
+
 
 
 
@@ -136,21 +256,30 @@ Profile Reactions
 
 
 
-<div class="card">
+
+
+
+<div class="form-box">
 
 
 <form method="POST">
 
 
+
 <input
+
+type="text"
 
 name="profile_url"
 
 value="<%= profile_url || '' %>"
 
-placeholder="LinkedIn URL"
+placeholder="https://linkedin.com/in/profile"
 
-required>
+required
+
+>
+
 
 
 <button class="btn btn-primary">
@@ -158,6 +287,7 @@ required>
 Fetch →
 
 </button>
+
 
 
 </form>
@@ -169,13 +299,27 @@ Fetch →
 
 
 
+
+
+
+
 <%
 
+const reactions =
 
-const reactions = result?.data?.reactions || [];
+result?.data?.reactions ||
 
+result?.data?.data?.reactions ||
+
+result?.reactions ||
+
+[];
 
 %>
+
+
+
+
 
 
 
@@ -185,11 +329,22 @@ const reactions = result?.data?.reactions || [];
 
 
 
+
+
+
 <div class="reaction-card">
 
 
 
+
+
 <div class="user">
+
+
+
+
+
+<% if(item.author?.profile_picture){ %>
 
 
 <img
@@ -202,34 +357,70 @@ class="avatar"
 >
 
 
+<% }else{ %>
+
+
+<div class="avatar"></div>
+
+
+<% } %>
+
+
+
+
 
 <div>
+
 
 
 <div class="name">
 
 
-<%= item.author.firstName %>
+<%= item.author?.firstName || "" %>
 
-<%= item.author.lastName %>
+<%= item.author?.lastName || "" %>
 
 
 </div>
+
 
 
 
 <div class="headline">
 
-<%= item.author.headline %>
+
+<%= item.author?.headline || "No headline" %>
+
+
+</div>
+
+
+
+
+<a
+
+class="link"
+
+target="_blank"
+
+href="<%= item.author?.profile_url || '#' %>">
+
+
+View Profile
+
+
+</a>
+
+
 
 </div>
 
 
-</div>
-
-
 
 </div>
+
+
+
 
 
 
@@ -238,10 +429,12 @@ class="avatar"
 <div class="action">
 
 
-❤️ <%= item.action %>
+❤️ <%= item.action || "Reaction" %>
 
 
 </div>
+
+
 
 
 
@@ -259,12 +452,20 @@ Post
 
 <p>
 
-<%= item.text.substring(0,300) %>
 
-...</p>
+<%= item.text?.substring(0,300) || "No post text" %>
+
+
+...
+
+
+</p>
+
 
 
 </div>
+
+
 
 
 
@@ -274,15 +475,19 @@ Post
 <div class="stats">
 
 
+
 <span>
 
-❤️ 
 
-<%= item.post_stats.totalReactionCount %>
+❤️
+
+<%= item.post_stats?.totalReactionCount || 0 %>
 
 Likes
 
+
 </span>
+
 
 
 
@@ -292,7 +497,7 @@ Likes
 
 💬
 
-<%= item.post_stats.comments %>
+<%= item.post_stats?.comments || 0 %>
 
 Comments
 
@@ -302,20 +507,27 @@ Comments
 
 
 
+
 <span>
+
 
 🕒
 
-<%= item.timestamps.relative %>
+<%= item.timestamps?.relative || "" %>
+
 
 </span>
 
 
-</div>
-
-
 
 </div>
+
+
+
+
+
+</div>
+
 
 
 
@@ -327,12 +539,17 @@ Comments
 
 
 
+
+
+
 <% if(reactions.length===0 && result){ %>
 
 
-<div class="card">
+<div class="reaction-card">
+
 
 No reactions found
+
 
 </div>
 
@@ -341,10 +558,19 @@ No reactions found
 
 
 
+
+
+
+
+
+
 </div>
 
 
+
+
 </main>
+
 
 
 
