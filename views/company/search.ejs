@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Search Companies — LI Scraper</title>
+
+
+<link rel="stylesheet" href="/css/app.css">
+
+
+<style>
+
+
+.company-card{
+
+background:var(--bg2);
+
+border:1px solid var(--border);
+
+border-radius:15px;
+
+padding:25px;
+
+margin-top:20px;
+
+display:flex;
+
+gap:25px;
+
+align-items:flex-start;
+
+}
+
+
+
+.company-logo{
+
+width:100px;
+
+height:100px;
+
+border-radius:15px;
+
+object-fit:cover;
+
+background:#ddd;
+
+}
+
+
+
+.company-info{
+
+flex:1;
+
+}
+
+
+
+.company-name{
+
+font-size:24px;
+
+font-weight:800;
+
+}
+
+
+
+.company-desc{
+
+margin-top:10px;
+
+color:var(--text2);
+
+line-height:1.6;
+
+font-size:14px;
+
+}
+
+
+
+.badges{
+
+display:flex;
+
+gap:10px;
+
+flex-wrap:wrap;
+
+margin-top:15px;
+
+}
+
+
+
+.badge{
+
+background:var(--bg3);
+
+padding:8px 15px;
+
+border-radius:20px;
+
+font-size:12px;
+
+}
+
+
+
+.company-link{
+
+display:inline-block;
+
+margin-top:15px;
+
+color:#38bdf8;
+
+text-decoration:none;
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<%- include('../partials/sidebar',{page:'company-search'}) %>
+
+
+
+
+<main class="main">
+
+
+
+<header class="topbar">
+
+
+<h1 class="topbar-title">
+
+Search Companies
+
+</h1>
+
+
+<div class="topbar-meta">
+
+
+<code class="endpoint-badge">
+
+POST /search/companies
+
+</code>
+
+
+</div>
+
+
+</header>
+
+
+
+
+
+<div class="content">
+
+
+
+
+
+
+<div class="card">
+
+
+<div class="card-title">
+
+Search Company
+
+</div>
+
+
+
+
+<form method="POST" action="/linkedin/search/companies">
+
+
+
+<div class="form-row">
+
+
+
+<div class="form-group">
+
+
+<label>
+
+Keyword
+
+</label>
+
+
+
+<input
+
+type="text"
+
+name="keyword"
+
+value="<%= keyword || '' %>"
+
+placeholder="software"
+
+required
+
+>
+
+
+</div>
+
+
+
+
+
+<button class="btn btn-primary">
+
+Fetch →
+
+</button>
+
+
+
+
+
+</div>
+
+
+
+</form>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<% if(error){ %>
+
+
+<div class="alert alert-error">
+
+⚠ <%= error %>
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+
+<%
+
+
+let companies=[];
+
+
+if(result){
+
+
+companies = result.data?.companies || [];
+
+
+}
+
+
+
+%>
+
+
+
+
+
+
+
+
+
+<% companies.forEach(company=>{ %>
+
+
+
+
+
+
+<div class="company-card">
+
+
+
+
+
+
+
+<% if(company.logo_url){ %>
+
+
+<img
+
+src="<%= company.logo_url %>"
+
+class="company-logo"
+
+>
+
+
+<% } else { %>
+
+
+<div class="company-logo"></div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+<div class="company-info">
+
+
+
+
+
+
+
+<div class="company-name">
+
+
+<%= company.name || "Unknown Company" %>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="company-desc">
+
+
+<%=
+
+company.description ?
+
+company.description.substring(0,250)
+
+:
+
+"No description available"
+
+%>
+
+
+...</div>
+
+
+
+
+
+
+
+
+
+<div class="badges">
+
+
+
+
+
+<% if(company.industry){ %>
+
+<span class="badge">
+
+🏢 <%= company.industry %>
+
+</span>
+
+
+<% } %>
+
+
+
+
+
+
+
+<% if(company.location){ %>
+
+<span class="badge">
+
+📍 <%= company.location %>
+
+</span>
+
+
+<% } %>
+
+
+
+
+
+
+
+<% if(company.follower_count){ %>
+
+<span class="badge">
+
+👥 <%= company.follower_count %>
+
+</span>
+
+
+<% } %>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<% if(company.company_url){ %>
+
+
+<a
+
+href="<%= company.company_url %>"
+
+target="_blank"
+
+class="company-link">
+
+
+View LinkedIn Profile →
+
+
+</a>
+
+
+<% } %>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<% }) %>
+
+
+
+
+
+
+
+
+
+<% if(companies.length===0 && result){ %>
+
+
+<div class="card">
+
+
+No companies found
+
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+</div>
+
+
+
+</main>
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+</body>
+
+
+</html>

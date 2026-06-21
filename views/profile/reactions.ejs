@@ -1,14 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
 
 <meta charset="UTF-8">
-
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 
 <title>Profile Reactions</title>
 
@@ -16,23 +12,16 @@
 <link rel="stylesheet" href="/css/app.css">
 
 
-
 <style>
 
 
 .reaction-card{
 
-
 background:var(--bg2);
-
 border:1px solid var(--border);
-
 border-radius:15px;
-
 padding:20px;
-
 margin-top:20px;
-
 
 }
 
@@ -40,11 +29,8 @@ margin-top:20px;
 
 .user{
 
-
 display:flex;
-
 gap:15px;
-
 align-items:center;
 
 }
@@ -53,15 +39,10 @@ align-items:center;
 
 .avatar{
 
-
 width:60px;
-
 height:60px;
-
 border-radius:50%;
-
 object-fit:cover;
-
 
 }
 
@@ -70,7 +51,6 @@ object-fit:cover;
 .name{
 
 font-size:18px;
-
 font-weight:700;
 
 }
@@ -79,9 +59,8 @@ font-weight:700;
 
 .headline{
 
-font-size:13px;
-
 color:#999;
+font-size:13px;
 
 }
 
@@ -89,35 +68,23 @@ color:#999;
 
 .action{
 
-
 margin-top:15px;
-
 background:var(--bg3);
-
 padding:10px;
-
 border-radius:20px;
-
 display:inline-block;
-
 
 }
 
 
 
+
 .post{
 
-
 margin-top:15px;
-
 background:var(--bg3);
-
 padding:15px;
-
 border-radius:10px;
-
-line-height:1.5;
-
 
 }
 
@@ -125,15 +92,10 @@ line-height:1.5;
 
 .stats{
 
-
 display:flex;
-
 gap:20px;
-
 margin-top:15px;
-
 color:#aaa;
-
 
 }
 
@@ -142,23 +104,18 @@ color:#aaa;
 </style>
 
 
-
 </head>
-
 
 
 
 <body>
 
 
-
 <%- include('../partials/sidebar',{page:'profile-reactions'}) %>
 
 
 
-
 <main class="main">
-
 
 
 <header class="topbar">
@@ -175,13 +132,7 @@ Profile Reactions
 
 
 
-
-
-
-
 <div class="content">
-
-
 
 
 
@@ -197,11 +148,9 @@ name="profile_url"
 
 value="<%= profile_url || '' %>"
 
-placeholder="LinkedIn Profile URL"
+placeholder="LinkedIn URL"
 
-required
-
->
+required>
 
 
 <button class="btn btn-primary">
@@ -211,9 +160,7 @@ Fetch →
 </button>
 
 
-
 </form>
-
 
 
 </div>
@@ -222,18 +169,13 @@ Fetch →
 
 
 
-
-
-
-
 <%
+
 
 const reactions = result?.data?.reactions || [];
 
+
 %>
-
-
-
 
 
 
@@ -243,19 +185,11 @@ const reactions = result?.data?.reactions || [];
 
 
 
-
-
-
 <div class="reaction-card">
 
 
 
-
-
-
-
 <div class="user">
-
 
 
 <img
@@ -264,9 +198,8 @@ src="<%= item.author.profile_picture %>"
 
 class="avatar"
 
-/>
 
-
+>
 
 
 
@@ -275,9 +208,11 @@ class="avatar"
 
 <div class="name">
 
+
 <%= item.author.firstName %>
 
 <%= item.author.lastName %>
+
 
 </div>
 
@@ -300,8 +235,6 @@ class="avatar"
 
 
 
-
-
 <div class="action">
 
 
@@ -309,9 +242,6 @@ class="avatar"
 
 
 </div>
-
-
-
 
 
 
@@ -327,19 +257,14 @@ Post
 </strong>
 
 
-
 <p>
 
-
 <%= item.text.substring(0,300) %>
-
 
 ...</p>
 
 
-
 </div>
-
 
 
 
@@ -351,7 +276,7 @@ Post
 
 <span>
 
-❤️
+❤️ 
 
 <%= item.post_stats.totalReactionCount %>
 
@@ -364,11 +289,13 @@ Likes
 
 <span>
 
+
 💬
 
 <%= item.post_stats.comments %>
 
 Comments
+
 
 </span>
 
@@ -388,20 +315,12 @@ Comments
 
 
 
-
-
-
-
 </div>
 
 
 
 
-
 <% }) %>
-
-
-
 
 
 
@@ -422,15 +341,10 @@ No reactions found
 
 
 
-
-
-
-
 </div>
 
 
 </main>
-
 
 
 

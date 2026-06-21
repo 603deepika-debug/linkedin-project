@@ -195,17 +195,62 @@ router.post('/company/posts', async (req, res) => {
 //   }
 // });
 
+// router.get('/search/companies', (req, res) => {
+//   res.render('search/companies', { result: null, status: null, error: null, keyword: '' });
+// });
+// router.post('/search/companies', async (req, res) => {
+//   const { keyword } = req.body;
+//   try {
+//     const result = await api.searchCompanies(keyword);
+//     handleResult(res, 'search/companies', result, { keyword });
+//   } catch (err) {
+//     handleError(res, 'search/companies', err, { keyword });
+//   }
+// });
+
 router.get('/search/companies', (req, res) => {
-  res.render('search/companies', { result: null, status: null, error: null, keyword: '' });
+
+  res.render('company/search', { 
+    result: null, 
+    status: null, 
+    error: null, 
+    keyword: '' 
+  });
+
 });
+
+
 router.post('/search/companies', async (req, res) => {
+
   const { keyword } = req.body;
+
+
   try {
+
     const result = await api.searchCompanies(keyword);
-    handleResult(res, 'search/companies', result, { keyword });
-  } catch (err) {
-    handleError(res, 'search/companies', err, { keyword });
+
+
+    handleResult(
+      res,
+      'company/search',
+      result,
+      { keyword }
+    );
+
+
+  } catch(err){
+
+
+    handleError(
+      res,
+      'company/search',
+      err,
+      { keyword }
+    );
+
+
   }
+
 });
 
 router.get('/job/detail',(req,res)=>{

@@ -295,7 +295,9 @@ Fetch →
 <%
 
 
-const data = result.data.basic_info;
+<%
+
+const data = result?.data?.basic_info || {};
 
 
 
@@ -321,6 +323,8 @@ const data = result.data.basic_info;
 
 
 
+<% if(data.profile_picture_url){ %>
+
 <img
 
 src="<%= data.profile_picture_url %>"
@@ -328,6 +332,12 @@ src="<%= data.profile_picture_url %>"
 class="avatar"
 
 />
+
+<% } else { %>
+
+<div class="avatar"></div>
+
+<% } %>
 
 
 
@@ -359,12 +369,15 @@ class="avatar"
 
 <div class="info">
 
+<% if(data.location){ %>
 
 <span>
 
 📍 <%= data.location.full %>
 
 </span>
+
+<% } %>
 
 
 
@@ -403,7 +416,7 @@ class="avatar"
 
 <p>
 
-<%= data.about %>
+<%= data.about || "No about available" %>
 
 </p>
 

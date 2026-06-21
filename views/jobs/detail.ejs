@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Job Detail — LI Scraper</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/app.css">
+
+
+<style>
+
+
+.job-container{
+
+margin-top:20px;
+
+}
+
+
+
+.job-card{
+
+background:var(--bg2);
+
+border:1px solid var(--border);
+
+border-radius:16px;
+
+padding:25px;
+
+}
+
+
+
+
+
+.job-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:flex-start;
+
+gap:20px;
+
+}
+
+
+
+.job-title{
+
+font-size:28px;
+
+font-weight:800;
+
+}
+
+
+
+.company{
+
+margin-top:10px;
+
+font-size:17px;
+
+color:#38bdf8;
+
+}
+
+
+
+
+
+.job-info{
+
+display:flex;
+
+gap:15px;
+
+flex-wrap:wrap;
+
+margin-top:20px;
+
+}
+
+
+
+.badge{
+
+background:var(--bg3);
+
+padding:8px 15px;
+
+border-radius:20px;
+
+font-size:13px;
+
+}
+
+
+
+
+
+.section{
+
+
+margin-top:25px;
+
+background:var(--bg3);
+
+padding:20px;
+
+border-radius:12px;
+
+}
+
+
+
+.section h2{
+
+font-size:18px;
+
+margin-bottom:10px;
+
+}
+
+
+
+.description{
+
+
+line-height:1.7;
+
+color:var(--text2);
+
+font-size:14px;
+
+
+}
+
+
+
+
+.apply-btn{
+
+
+display:inline-block;
+
+margin-top:20px;
+
+background:#22c55e;
+
+color:white;
+
+padding:12px 22px;
+
+border-radius:8px;
+
+text-decoration:none;
+
+}
+
+
+
+.apply-btn:hover{
+
+opacity:.8;
+
+}
+
+
+
+pre{
+
+
+white-space:pre-wrap;
+
+font-size:12px;
+
+overflow:auto;
+
+
+}
+
+
+
+
+</style>
+
+
+</head>
+
+
+
+
+<body>
+
+
+
+<%- include('../partials/sidebar',{page:'job-detail'}) %>
+
+
+
+
+<main class="main">
+
+
+
+<header class="topbar">
+
+
+<h1 class="topbar-title">
+
+Job Detail
+
+</h1>
+
+
+
+<div class="topbar-meta">
+
+<code class="endpoint-badge">
+
+GET /jobs/detail
+
+</code>
+
+</div>
+
+
+</header>
+
+
+
+
+
+
+
+<div class="content">
+
+
+
+
+
+<div class="card">
+
+
+<div class="card-title">
+
+Parameters
+
+</div>
+
+
+
+
+
+<form method="GET">
+
+
+<div class="form-row">
+
+
+
+<div class="form-group">
+
+
+<label>
+
+Job ID
+
+</label>
+
+
+
+<input
+
+type="text"
+
+name="job_id"
+
+value="<%= job_id || '' %>"
+
+placeholder="4011051212"
+
+required
+
+>
+
+
+
+</div>
+
+
+
+<button class="btn btn-primary">
+
+Fetch →
+
+</button>
+
+
+
+</div>
+
+
+
+</form>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<% if(error){ %>
+
+
+<div class="alert alert-error">
+
+
+⚠ <%= error %>
+
+
+</div>
+
+
+
+<% } %>
+
+
+
+
+
+
+
+
+
+<% if(result){ %>
+
+
+
+<%
+
+
+const job =
+
+result.data?.job ||
+
+result.data ||
+
+{};
+
+
+
+%>
+
+
+
+
+
+
+
+
+
+<div class="job-container">
+
+
+
+<div class="job-card">
+
+
+
+
+
+
+<div class="job-header">
+
+
+
+<div>
+
+
+
+<h1 class="job-title">
+
+
+<%=
+
+job.title ||
+
+job.job_title ||
+
+"Unknown Job"
+
+%>
+
+
+</h1>
+
+
+
+
+
+<div class="company">
+
+
+🏢
+
+<%=
+
+job.company?.name ||
+
+job.company_name ||
+
+"Unknown Company"
+
+%>
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="job-info">
+
+
+
+<% if(job.location){ %>
+
+
+<span class="badge">
+
+📍 <%= job.location %>
+
+</span>
+
+
+<% } %>
+
+
+
+
+
+
+
+<% if(job.employment_type){ %>
+
+
+<span class="badge">
+
+💼 <%= job.employment_type %>
+
+</span>
+
+
+<% } %>
+
+
+
+
+
+
+
+<% if(job.workplace_type){ %>
+
+
+<span class="badge">
+
+🏠 <%= job.workplace_type %>
+
+</span>
+
+
+<% } %>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+
+
+<h2>
+
+Description
+
+</h2>
+
+
+
+<p class="description">
+
+
+<%=
+
+job.description ||
+
+job.job_description ||
+
+"No description available"
+
+%>
+
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<% if(job.skills){ %>
+
+
+<div class="section">
+
+
+<h2>
+
+Skills
+
+</h2>
+
+
+
+<p>
+
+
+<%= job.skills %>
+
+
+</p>
+
+
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+
+
+<% if(job.apply_url){ %>
+
+
+
+<a
+
+href="<%= job.apply_url %>"
+
+target="_blank"
+
+class="apply-btn">
+
+
+Apply Job →
+
+
+</a>
+
+
+
+<% } %>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<div class="section">
+
+
+<h2>
+
+Raw Data
+
+</h2>
+
+
+<pre>
+
+<%= JSON.stringify(result,null,2) %>
+
+
+</pre>
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<% } %>
+
+
+
+
+
+
+
+
+</div>
+
+
+</main>
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+</body>
+
+
+</html>
