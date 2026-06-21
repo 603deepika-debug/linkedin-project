@@ -222,15 +222,18 @@ Fetch →
 
 <%
 
-let comments=[];
+let comments = [];
 
+if(result){
 
-if(result && result.data && result.data.comments){
-
-comments=result.data.comments;
+  comments =
+  result.data?.comments ||
+  result.data?.items ||
+  result.data?.results ||
+  result.comments ||
+  [];
 
 }
-
 
 %>
 
@@ -252,7 +255,12 @@ comments=result.data.comments;
 
 class="comment-avatar"
 
-src="<%= comment.commenter?.profile_picture %>"
+src="<%= 
+comment.commenter?.profile_picture ||
+comment.author?.profile_picture ||
+comment.user?.profile_picture ||
+''
+%>"
 
 onerror="this.style.display='none'"
 
@@ -265,14 +273,24 @@ onerror="this.style.display='none'"
 
 <div class="comment-name">
 
-<%= comment.commenter?.name || 'Unknown User' %>
+<%= 
+comment.commenter?.name ||
+comment.author?.name ||
+comment.user?.name ||
+comment.name ||
+'Unknown User'
+%>
 
 </div>
 
 
 <div class="comment-sub">
 
-<%= comment.commenter?.subtitle || '' %>
+<%= 
+comment.commenter?.subtitle ||
+comment.author?.headline ||
+''
+%>
 
 </div>
 
@@ -301,7 +319,12 @@ View Profile
 <div class="comment-text">
 
 
-<%= comment.comment_text %>
+<%= 
+comment.comment_text ||
+comment.text ||
+comment.comment ||
+''
+%>
 
 
 </div>
@@ -320,7 +343,12 @@ Original Post
 
 <p>
 
-<%= comment.post?.post_text?.substring(0,300) %>
+<%= 
+(comment.post?.post_text ||
+comment.post?.text ||
+'')
+.substring(0,300)
+%>
 
 ...
 
@@ -337,7 +365,11 @@ Original Post
 
 
 <span>
-❤️ <%= comment.stats?.total_reactions || 0 %> Reactions
+❤️ <%= 
+comment.stats?.total_reactions ||
+comment.reactions ||
+0
+%> Reactions
 </span>
 
 

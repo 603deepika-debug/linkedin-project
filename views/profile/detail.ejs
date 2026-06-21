@@ -201,17 +201,31 @@ Fetch →
 
 <%
 
-const data = result.data || {};
+const data = result.data?.profile || result.data || {};
 
-const name = data.fullname || 
-(data.first_name + " " + data.last_name);
+const name = 
+data.full_name ||
+data.fullname ||
+(data.first_name ? data.first_name + " " + data.last_name : "Unknown");
 
-const photo = data.profile_picture_url;
 
-const headline = data.headline || data.title || "";
+const photo =
+data.profile_picture ||
+data.profile_picture_url ||
+data.photo;
 
-const location = data.location?.full || "";
 
+const headline =
+data.headline ||
+data.title ||
+data.position ||
+"";
+
+
+const location =
+data.location ||
+data.city ||
+"";
 const about = data.summary || data.about || "";
 
 %>

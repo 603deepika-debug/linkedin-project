@@ -295,12 +295,16 @@ Fetch →
 
 <%
 
-let reactions=[];
+let reactions = [];
 
+if(result){
 
-if(result && result.data && result.data.reactions){
-
-reactions=result.data.reactions;
+  reactions =
+  result.data?.reactions ||
+  result.data?.items ||
+  result.data?.results ||
+  result.reactions ||
+  [];
 
 }
 
@@ -333,7 +337,13 @@ reactions=result.data.reactions;
 
 <img
 
-src="<%= item.reacter?.profile_picture || item.user?.profile_picture %>"
+src="<%= 
+item.reacter?.profile_picture ||
+item.user?.profile_picture ||
+item.author?.profile_picture ||
+''
+
+%>"
 
 class="reaction-avatar"
 
@@ -344,14 +354,21 @@ onerror="this.style.display='none'"
 
 
 
-
 <div>
 
 
 <div class="reaction-name">
 
 
-<%= item.reacter?.name || item.user?.name || 'Unknown User' %>
+<%= 
+
+item.reacter?.name ||
+item.user?.name ||
+item.author?.name ||
+item.name ||
+'Unknown User'
+
+%>
 
 
 </div>
@@ -361,7 +378,14 @@ onerror="this.style.display='none'"
 <div class="reaction-headline">
 
 
-<%= item.reacter?.subtitle || item.user?.headline || '' %>
+<%=
+
+item.reacter?.subtitle ||
+item.user?.headline ||
+item.author?.headline ||
+''
+
+%>
 
 
 </div>
@@ -401,8 +425,14 @@ View Profile
 
 ❤️ 
 
-<%= item.reaction_type || item.type || 'Reaction' %>
+<%=
 
+item.reaction_type ||
+item.type ||
+item.reaction ||
+'Reaction'
+
+%>
 
 </div>
 
@@ -425,7 +455,17 @@ Post
 
 <p>
 
-<%= item.post?.post_text?.substring(0,300) || '' %>
+<%=
+
+(
+item.post?.post_text ||
+item.post?.text ||
+item.text ||
+''
+
+).substring(0,300)
+
+%>
 
 ...
 
@@ -448,7 +488,10 @@ Post
 
 ❤️ 
 
-<%= item.post?.post_stats?.total_reactions || 0 %>
+item.post?.post_stats?.total_reactions ||
+item.stats?.total_reactions ||
+item.total_reactions ||
+0
 
 Reactions
 
