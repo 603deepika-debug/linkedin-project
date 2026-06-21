@@ -47,59 +47,49 @@ router.post('/profile/posts', async (req, res) => {
   }
 });
 
-/** GET /linkedin/profile/experience */
-router.get('/profile/experience', (req, res) => {
-  res.render('profile/experience', { result: null, status: null, error: null, profile_url: '' });
+router.get('/profile/comments', (req, res) => {
+  res.render('profile/comments', { result: null, status: null, error: null, profile_url: '' });
 });
-router.post('/profile/experience', async (req, res) => {
+
+router.post('/profile/comments', async (req, res) => {
   const { profile_url } = req.body;
+
   try {
-    const result = await api.getProfileExperience(profile_url);
-    handleResult(res, 'profile/experience', result, { profile_url });
+    const result = await api.getProfileComments(profile_url);
+    handleResult(res, 'profile/comments', result, { profile_url });
   } catch (err) {
-    handleError(res, 'profile/experience', err, { profile_url });
+    handleError(res, 'profile/comments', err, { profile_url });
   }
 });
 
-/** GET /linkedin/profile/education */
-router.get('/profile/education', (req, res) => {
-  res.render('profile/education', { result: null, status: null, error: null, profile_url: '' });
+
+router.get('/profile/reactions', (req, res) => {
+  res.render('profile/reactions', { result: null, status: null, error: null, profile_url: '' });
 });
-router.post('/profile/education', async (req, res) => {
+
+router.post('/profile/reactions', async (req, res) => {
   const { profile_url } = req.body;
+
   try {
-    const result = await api.getProfileEducation(profile_url);
-    handleResult(res, 'profile/education', result, { profile_url });
+    const result = await api.getProfileReactions(profile_url);
+    handleResult(res, 'profile/reactions', result, { profile_url });
   } catch (err) {
-    handleError(res, 'profile/education', err, { profile_url });
+    handleError(res, 'profile/reactions', err, { profile_url });
   }
 });
 
-/** GET /linkedin/profile/skills */
-router.get('/profile/skills', (req, res) => {
-  res.render('profile/skills', { result: null, status: null, error: null, profile_url: '' });
-});
-router.post('/profile/skills', async (req, res) => {
-  const { profile_url } = req.body;
-  try {
-    const result = await api.getProfileSkills(profile_url);
-    handleResult(res, 'profile/skills', result, { profile_url });
-  } catch (err) {
-    handleError(res, 'profile/skills', err, { profile_url });
-  }
+router.get('/profile/contact', (req, res) => {
+  res.render('profile/contact', { result: null, status: null, error: null, profile_url: '' });
 });
 
-/** GET /linkedin/profile/connections */
-router.get('/profile/connections', (req, res) => {
-  res.render('profile/connections', { result: null, status: null, error: null, profile_url: '' });
-});
-router.post('/profile/connections', async (req, res) => {
+router.post('/profile/contact', async (req, res) => {
   const { profile_url } = req.body;
+
   try {
-    const result = await api.getProfileConnections(profile_url);
-    handleResult(res, 'profile/connections', result, { profile_url });
+    const result = await api.getProfileContact(profile_url);
+    handleResult(res, 'profile/contact', result, { profile_url });
   } catch (err) {
-    handleError(res, 'profile/connections', err, { profile_url });
+    handleError(res, 'profile/contact', err, { profile_url });
   }
 });
 
@@ -134,48 +124,75 @@ router.post('/company/detail', async (req, res) => {
   }
 });
 
-router.get('/company/employees', (req, res) => {
-  res.render('company/employees', { result: null, status: null, error: null, company: '' });
-});
-router.post('/company/employees', async (req, res) => {
-  const { company } = req.body;
-  try {
-    const result = await api.getCompanyEmployees(company);
-    handleResult(res, 'company/employees', result, { company });
-  } catch (err) {
-    handleError(res, 'company/employees', err, { company });
-  }
+// ═══════════════════════════════════════════════════════════════
+// COMPANY POSTS
+// ═══════════════════════════════════════════════════════════════
+
+router.get('/company/posts', (req, res) => {
+  res.render('company/posts', { result: null,status: null,error: null,company: '' });
 });
 
-router.get('/company/jobs', (req, res) => {
-  res.render('company/jobs', { result: null, status: null, error: null, company: '' });
-});
-router.post('/company/jobs', async (req, res) => {
+
+router.post('/company/posts', async (req, res) => {
+
   const { company } = req.body;
+
   try {
-    const result = await api.getCompanyJobs(company);
-    handleResult(res, 'company/jobs', result, { company });
+
+    const result = await api.getCompanyPosts(company);
+
+    handleResult(res,'company/posts',result,{ company });
+
   } catch (err) {
-    handleError(res, 'company/jobs', err, { company });
+
+    handleError(res,'company/posts',err, { company });
+
   }
+
 });
+
+// router.get('/company/employees', (req, res) => {
+//   res.render('company/employees', { result: null, status: null, error: null, company: '' });
+// });
+// router.post('/company/employees', async (req, res) => {
+//   const { company } = req.body;
+//   try {
+//     const result = await api.getCompanyEmployees(company);
+//     handleResult(res, 'company/employees', result, { company });
+//   } catch (err) {
+//     handleError(res, 'company/employees', err, { company });
+//   }
+// });
+
+// router.get('/company/jobs', (req, res) => {
+//   res.render('company/jobs', { result: null, status: null, error: null, company: '' });
+// });
+// router.post('/company/jobs', async (req, res) => {
+//   const { company } = req.body;
+//   try {
+//     const result = await api.getCompanyJobs(company);
+//     handleResult(res, 'company/jobs', result, { company });
+//   } catch (err) {
+//     handleError(res, 'company/jobs', err, { company });
+//   }
+// });
 
 // ═══════════════════════════════════════════════════════════════
 //  SEARCH ENDPOINTS
 // ═══════════════════════════════════════════════════════════════
 
-router.get('/search/people', (req, res) => {
-  res.render('search/people', { result: null, status: null, error: null, keyword: '' });
-});
-router.post('/search/people', async (req, res) => {
-  const { keyword } = req.body;
-  try {
-    const result = await api.searchPeople(keyword);
-    handleResult(res, 'search/people', result, { keyword });
-  } catch (err) {
-    handleError(res, 'search/people', err, { keyword });
-  }
-});
+// router.get('/search/people', (req, res) => {
+//   res.render('search/people', { result: null, status: null, error: null, keyword: '' });
+// });
+// router.post('/search/people', async (req, res) => {
+//   const { keyword } = req.body;
+//   try {
+//     const result = await api.searchPeople(keyword);
+//     handleResult(res, 'search/people', result, { keyword });
+//   } catch (err) {
+//     handleError(res, 'search/people', err, { keyword });
+//   }
+// });
 
 router.get('/search/companies', (req, res) => {
   res.render('search/companies', { result: null, status: null, error: null, keyword: '' });
@@ -188,6 +205,29 @@ router.post('/search/companies', async (req, res) => {
   } catch (err) {
     handleError(res, 'search/companies', err, { keyword });
   }
+});
+
+router.get('/job/detail',(req,res)=>{
+ res.render('job/detail',{result:null,status:null,error:null,job_id:''});
+});
+
+
+router.post('/job/detail',async(req,res)=>{
+
+ const {job_id}=req.body;
+
+ try{
+
+ const result = await api.getJobDetail(job_id);
+
+ handleResult(res,'job/detail',result,{job_id});
+}
+ catch(err){
+
+ handleError(res, 'job/detail',err,{job_id});
+
+ }
+
 });
 
 router.get('/search/jobs', (req, res) => {

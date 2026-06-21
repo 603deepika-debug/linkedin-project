@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Profile Contact — LI Scraper</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/app.css" />
+
+
+<style>
+
+
+.contact-card{
+
+background:var(--bg2);
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+padding:25px;
+
+margin-top:20px;
+
+
+}
+
+
+
+.contact-row{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+padding:15px 0;
+
+border-bottom:1px solid var(--border);
+
+
+}
+
+
+
+.contact-icon{
+
+font-size:28px;
+
+width:45px;
+
+
+}
+
+
+
+.contact-title{
+
+font-size:13px;
+
+color:var(--text3);
+
+}
+
+
+
+.contact-value{
+
+font-size:15px;
+
+font-weight:700;
+
+margin-top:5px;
+
+color:var(--text);
+
+
+}
+
+
+
+.contact-link{
+
+color:var(--accent);
+
+text-decoration:none;
+
+
+}
+
+
+
+.empty{
+
+text-align:center;
+
+padding:40px;
+
+color:var(--text3);
+
+}
+
+
+
+</style>
+
+
+
+</head>
+
+
+
+<body>
+
+
+<%- include('../partials/sidebar', { page:'profile-contact' }) %>
+
+
+
+<main class="main">
+
+
+<header class="topbar">
+
+
+<h1 class="topbar-title">
+Profile Contact
+</h1>
+
+
+<div class="topbar-meta">
+
+
+<code class="endpoint-badge">
+GET /profile/contact
+</code>
+
+
+</div>
+
+
+</header>
+
+
+
+
+<div class="content">
+
+
+
+
+
+<div class="card">
+
+
+<div class="card-title">
+
+Parameters
+
+</div>
+
+
+
+
+<form method="POST" action="/linkedin/profile/contact">
+
+
+<div class="form-row">
+
+
+<div class="form-group">
+
+
+<label>
+
+LinkedIn Profile URL
+
+</label>
+
+
+<input
+
+type="text"
+
+id="profile_url"
+
+name="profile_url"
+
+value="<%= profile_url || '' %>"
+
+placeholder="https://www.linkedin.com/in/satya-nadella"
+
+required
+
+/>
+
+
+</div>
+
+
+
+<button type="submit" class="btn btn-primary">
+
+Fetch →
+
+</button>
+
+
+
+</div>
+
+
+</form>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<% if(error){ %>
+
+
+<div class="alert alert-error">
+
+<%= error %>
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+<%
+
+let contact={};
+
+
+if(result && result.data){
+
+contact=result.data;
+
+}
+
+%>
+
+
+
+
+
+
+
+
+<% if(result){ %>
+
+
+
+<div class="contact-card">
+
+
+
+<h2>
+
+📇 Contact Information
+
+</h2>
+
+
+
+
+
+
+
+<% if(contact.email){ %>
+
+<div class="contact-row">
+
+
+<div class="contact-icon">
+
+📧
+
+</div>
+
+
+<div>
+
+
+<div class="contact-title">
+
+Email
+
+</div>
+
+
+<div class="contact-value">
+
+
+<a class="contact-link" href="mailto:<%= contact.email %>">
+
+<%= contact.email %>
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+
+<% if(contact.phone){ %>
+
+
+<div class="contact-row">
+
+
+<div class="contact-icon">
+
+📱
+
+</div>
+
+
+
+<div>
+
+
+<div class="contact-title">
+
+Phone
+
+</div>
+
+
+
+<div class="contact-value">
+
+<%= contact.phone %>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<% } %>
+
+
+
+
+
+
+
+
+
+<% if(contact.website){ %>
+
+
+<div class="contact-row">
+
+
+<div class="contact-icon">
+
+🌐
+
+</div>
+
+
+
+<div>
+
+
+<div class="contact-title">
+
+Website
+
+</div>
+
+
+
+<div class="contact-value">
+
+
+<a
+
+target="_blank"
+
+class="contact-link"
+
+href="<%= contact.website %>">
+
+
+<%= contact.website %>
+
+
+</a>
+
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+<% } %>
+
+
+
+
+
+
+
+
+<% if(contact.twitter){ %>
+
+
+<div class="contact-row">
+
+
+<div class="contact-icon">
+
+🐦
+
+</div>
+
+
+
+<div>
+
+
+<div class="contact-title">
+
+Twitter
+
+</div>
+
+
+
+<div class="contact-value">
+
+<%= contact.twitter %>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+
+<% if(!contact.email && !contact.phone && !contact.website && !contact.twitter){ %>
+
+
+<div class="empty">
+
+
+No public contact information found
+
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+</div>
+
+
+
+<% } %>
+
+
+
+
+
+
+
+</div>
+
+
+</main>
+
+
+
+<script src="/js/app.js"></script>
+
+
+</body>
+
+</html>

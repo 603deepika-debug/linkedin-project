@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>Profile Posts — LI Scraper</title>
+<title>Profile Comments — LI Scraper</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="/css/app.css" />
@@ -17,115 +14,90 @@
 
 <style>
 
-
-.post-card{
+.comment-card{
 
 background:var(--bg2);
-
 border:1px solid var(--border);
-
 border-radius:12px;
-
 padding:20px;
-
 margin-top:20px;
 
 }
 
 
-
-.post-header{
+.comment-header{
 
 display:flex;
-
 gap:15px;
-
 align-items:center;
 
 }
 
 
-.post-avatar{
+.comment-avatar{
 
 width:55px;
-
 height:55px;
-
 border-radius:50%;
-
 object-fit:cover;
-
 background:#ddd;
 
 }
 
 
+.comment-name{
 
-.post-name{
-
-font-weight:800;
-
+font-weight:700;
 font-size:16px;
 
 }
 
 
+.comment-sub{
 
-.post-title{
+font-size:12px;
+color:var(--text3);
 
-font-size:13px;
+}
 
+
+
+.comment-text{
+
+margin-top:15px;
+font-size:14px;
+line-height:1.6;
 color:var(--text2);
 
 }
 
 
 
-.post-text{
-
-margin-top:18px;
-
-font-size:14px;
-
-line-height:1.6;
-
-white-space:pre-line;
-
-}
-
-
-
-.post-image{
-
-width:100%;
-
-max-height:400px;
-
-object-fit:cover;
-
-border-radius:10px;
+.post-box{
 
 margin-top:15px;
+background:var(--bg3);
+padding:15px;
+border-radius:8px;
+font-size:13px;
 
 }
-
 
 
 .stats{
 
 display:flex;
-
 gap:20px;
-
 margin-top:15px;
+font-size:12px;
+color:var(--text3);
 
-font-size:13px;
+}
 
-color:var(--text2);
 
-border-top:1px solid var(--border);
+.linkedin-link{
 
-padding-top:12px;
+color:var(--accent);
 
 }
 
@@ -137,12 +109,10 @@ padding-top:12px;
 </head>
 
 
-
 <body>
 
 
-<%- include('../partials/sidebar', { page:'profile-posts' }) %>
-
+<%- include('../partials/sidebar', { page:'profile-comments' }) %>
 
 
 <main class="main">
@@ -150,23 +120,21 @@ padding-top:12px;
 
 <header class="topbar">
 
-
 <h1 class="topbar-title">
-Profile Posts
+Profile Comments
 </h1>
 
 
 <div class="topbar-meta">
 
 <code class="endpoint-badge">
-GET /profile/posts
+GET /profile/comments
 </code>
 
 </div>
 
 
 </header>
-
 
 
 
@@ -183,8 +151,7 @@ Parameters
 
 
 
-<form method="POST">
-
+<form method="POST" action="/linkedin/profile/comments">
 
 
 <div class="form-row">
@@ -225,12 +192,10 @@ Fetch →
 </button>
 
 
-
 </div>
 
 
 </form>
-
 
 
 </div>
@@ -244,14 +209,12 @@ Fetch →
 
 <div class="alert alert-error">
 
-⚠ <%= error %>
+<%= error %>
 
 </div>
 
 
 <% } %>
-
-
 
 
 
@@ -259,14 +222,15 @@ Fetch →
 
 <%
 
-let posts=[];
+let comments=[];
 
 
-if(result){
+if(result && result.data && result.data.comments){
 
-posts = result.data?.posts || result.data || [];
+comments=result.data.comments;
 
 }
+
 
 %>
 
@@ -274,91 +238,58 @@ posts = result.data?.posts || result.data || [];
 
 
 
-
-<% if(posts.length){ %>
-
+<% comments.forEach(comment=>{ %>
 
 
+<div class="comment-card">
 
 
-<% posts.forEach(post=>{ %>
-
+<div class="comment-header">
 
 
 
+<img
 
-<div class="post-card">
+class="comment-avatar"
 
+src="<%= comment.commenter?.profile_picture %>"
 
-
-
-
-<div class="post-header">
-
-
-
-<% if(post.author?.profile_picture){ %>
-
-
-<img 
-
-src="<%= post.author.profile_picture %>"
-
-class="post-avatar"
+onerror="this.style.display='none'"
 
 />
-
-
-<% }else{ %>
-
-
-<div class="post-avatar"></div>
-
-
-<% } %>
-
 
 
 
 <div>
 
 
-<div class="post-name">
+<div class="comment-name">
 
-
-<%= post.author?.name || "LinkedIn User" %>
-
+<%= comment.commenter?.name || 'Unknown User' %>
 
 </div>
 
 
+<div class="comment-sub">
 
-<div class="post-title">
-
-
-<%= post.author?.headline || "" %>
-
+<%= comment.commenter?.subtitle || '' %>
 
 </div>
 
 
+<a class="linkedin-link"
+
+href="<%= comment.commenter?.linkedin_url %>"
+
+target="_blank">
+
+View Profile
+
+</a>
+
+
 </div>
 
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="post-text">
-
-
-<%= post.post_text || post.text || "" %>
 
 
 </div>
@@ -367,24 +298,36 @@ class="post-avatar"
 
 
 
+<div class="comment-text">
 
 
-<% if(post.image_url){ %>
+<%= comment.comment_text %>
 
 
-<img
-
-src="<%= post.image_url %>"
-
-class="post-image"
-
-/>
-
-
-<% } %>
+</div>
 
 
 
+
+
+<div class="post-box">
+
+
+<strong>
+Original Post
+</strong>
+
+
+<p>
+
+<%= comment.post?.post_text?.substring(0,300) %>
+
+...
+
+</p>
+
+
+</div>
 
 
 
@@ -394,38 +337,29 @@ class="post-image"
 
 
 <span>
-
-👍 
-
-<%= post.post_stats?.total_reactions || 0 %>
-
-Reactions
-
+❤️ <%= comment.stats?.total_reactions || 0 %> Reactions
 </span>
 
 
 <span>
+💬 <%= comment.stats?.comments || 0 %> Comments
+</span>
 
-💬
 
-<%= post.post_stats?.comments || 0 %>
 
-Comments
+<span>
+
+🕒 <%= comment.created_at?.relative || '' %>
 
 </span>
 
 
-</div>
-
-
-
-
-
 
 </div>
 
 
 
+</div>
 
 
 
@@ -435,22 +369,19 @@ Comments
 
 
 
-<% }else if(result){ %>
 
 
+<% if(comments.length===0 && result){ %>
 
-<div class="section-card">
 
+<div class="card">
 
-No posts found
-
+No comments found
 
 </div>
 
 
-
 <% } %>
-
 
 
 

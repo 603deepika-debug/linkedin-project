@@ -132,30 +132,27 @@ const getProfilePosts = (profile_url) =>
     )}`
   );
 
-const getProfileExperience = (profile_url) =>
+
+const getProfileComments = (profile_url) =>
   rapidRequest(
-    `/profile/experience?username=${encodeURIComponent(
+    `/profile/comments?username=${encodeURIComponent(
       extractUsername(profile_url)
-    )}`
+    )}&page_number=1`
   );
 
-const getProfileEducation = (profile_url) =>
+
+
+const getProfileReactions = (profile_url) =>
   rapidRequest(
-    `/profile/education?username=${encodeURIComponent(
+    `/profile/reactions?username=${encodeURIComponent(
       extractUsername(profile_url)
-    )}`
+    )}&page_number=1`
   );
 
-const getProfileSkills = (profile_url) =>
-  rapidRequest(
-    `/profile/skills?username=${encodeURIComponent(
-      extractUsername(profile_url)
-    )}`
-  );
 
-const getProfileConnections = (profile_url) =>
+const getProfileContact = (profile_url) =>
   rapidRequest(
-    `/profile/connections?username=${encodeURIComponent(
+    `/profile/contact?username=${encodeURIComponent(
       extractUsername(profile_url)
     )}`
   );
@@ -164,38 +161,38 @@ const getProfileConnections = (profile_url) =>
 // COMPANY ENDPOINTS
 // ─────────────────────────────────────────────
 
+
 const getCompanyDetail = (company) =>
   rapidRequest(
-    `/company/detail?company=${encodeURIComponent(company)}`
+    `/companies/detail?identifier=${encodeURIComponent(company)}`
   );
 
-const getCompanyEmployees = (company) =>
+
+const getCompanyPosts = (company) =>
   rapidRequest(
-    `/company/employees?company=${encodeURIComponent(company)}`
+    `/company/posts?company_name=${encodeURIComponent(company)}`
   );
 
-const getCompanyJobs = (company) =>
+
+const searchCompanies = (keyword) =>
   rapidRequest(
-    `/company/jobs?company=${encodeURIComponent(company)}`
+    `/companies/search?keyword=${encodeURIComponent(keyword)}&page_number=1`
   );
 
 // ─────────────────────────────────────────────
 // SEARCH ENDPOINTS
 // ─────────────────────────────────────────────
 
-const searchPeople = (keyword) =>
+
+const getJobDetail = (job_id) =>
   rapidRequest(
-    `/search/people?keyword=${encodeURIComponent(keyword)}`
+    `/jobs/detail?job_id=${encodeURIComponent(job_id)}`
   );
 
-const searchCompanies = (keyword) =>
-  rapidRequest(
-    `/search/companies?keyword=${encodeURIComponent(keyword)}`
-  );
 
 const searchJobs = (keyword) =>
   rapidRequest(
-    `/search/jobs?keyword=${encodeURIComponent(keyword)}`
+    `/jobs/search?keywords=${encodeURIComponent(keyword)}&location=United%20States&page_number=1`
   );
 
 // ─────────────────────────────────────────────
@@ -210,15 +207,12 @@ const uploadProfileByUrl = (profileUrl) =>
 module.exports = {
   getProfileDetail,
   getProfilePosts,
-  getProfileExperience,
-  getProfileEducation,
-  getProfileSkills,
-  getProfileConnections,
+  getProfileComments,
+  getProfileReactions,
   getCompanyDetail,
-  getCompanyEmployees,
-  getCompanyJobs,
-  searchPeople,
+  getCompanyPosts,
   searchCompanies,
+  getJobDetail,
   searchJobs,
   uploadProfileByUrl,
 };

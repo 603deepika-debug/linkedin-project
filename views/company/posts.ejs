@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>Profile Posts — LI Scraper</title>
+<title>Company Posts — LI Scraper</title>
+
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+
 
 <link rel="stylesheet" href="/css/app.css" />
 
@@ -26,7 +27,7 @@ border:1px solid var(--border);
 
 border-radius:12px;
 
-padding:20px;
+padding:22px;
 
 margin-top:20px;
 
@@ -38,14 +39,15 @@ margin-top:20px;
 
 display:flex;
 
-gap:15px;
-
 align-items:center;
+
+gap:15px;
 
 }
 
 
-.post-avatar{
+
+.company-logo{
 
 width:55px;
 
@@ -53,29 +55,49 @@ height:55px;
 
 border-radius:50%;
 
-object-fit:cover;
+background:var(--bg3);
 
-background:#ddd;
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:25px;
+
+overflow:hidden;
 
 }
 
 
 
-.post-name{
+.company-logo img{
 
-font-weight:800;
+width:100%;
+
+height:100%;
+
+object-fit:cover;
+
+}
+
+
+
+.company-name{
 
 font-size:16px;
 
+font-weight:800;
+
 }
 
 
 
-.post-title{
+.post-date{
 
-font-size:13px;
+font-size:12px;
 
-color:var(--text2);
+color:var(--text3);
 
 }
 
@@ -87,7 +109,9 @@ margin-top:18px;
 
 font-size:14px;
 
-line-height:1.6;
+line-height:1.7;
+
+color:var(--text2);
 
 white-space:pre-line;
 
@@ -95,37 +119,33 @@ white-space:pre-line;
 
 
 
-.post-image{
+.post-stats{
 
-width:100%;
+display:flex;
 
-max-height:400px;
+gap:25px;
 
-object-fit:cover;
+margin-top:18px;
 
-border-radius:10px;
+padding-top:15px;
 
-margin-top:15px;
+border-top:1px solid var(--border);
+
+font-size:13px;
+
+color:var(--text3);
 
 }
 
 
 
-.stats{
+.empty{
 
-display:flex;
+text-align:center;
 
-gap:20px;
+padding:50px;
 
-margin-top:15px;
-
-font-size:13px;
-
-color:var(--text2);
-
-border-top:1px solid var(--border);
-
-padding-top:12px;
+color:var(--text3);
 
 }
 
@@ -141,7 +161,7 @@ padding-top:12px;
 <body>
 
 
-<%- include('../partials/sidebar', { page:'profile-posts' }) %>
+<%- include('../partials/sidebar', { page:'company-posts' }) %>
 
 
 
@@ -152,15 +172,19 @@ padding-top:12px;
 
 
 <h1 class="topbar-title">
-Profile Posts
+Company Posts
 </h1>
+
 
 
 <div class="topbar-meta">
 
 <code class="endpoint-badge">
-GET /profile/posts
+
+GET /company/posts
+
 </code>
+
 
 </div>
 
@@ -170,7 +194,11 @@ GET /profile/posts
 
 
 
+
+
 <div class="content">
+
+
 
 
 
@@ -178,13 +206,14 @@ GET /profile/posts
 
 
 <div class="card-title">
+
 Parameters
+
 </div>
 
 
 
 <form method="POST">
-
 
 
 <div class="form-row">
@@ -194,7 +223,9 @@ Parameters
 
 
 <label>
-LinkedIn Profile URL
+
+Company Name
+
 </label>
 
 
@@ -203,11 +234,11 @@ LinkedIn Profile URL
 
 type="text"
 
-name="profile_url"
+name="company"
 
-value="<%= profile_url || '' %>"
+value="<%= company || '' %>"
 
-placeholder="https://www.linkedin.com/in/satya-nadella"
+placeholder="Microsoft"
 
 required
 
@@ -215,6 +246,7 @@ required
 
 
 </div>
+
 
 
 
@@ -239,12 +271,16 @@ Fetch →
 
 
 
+
+
+
+
 <% if(error){ %>
 
 
 <div class="alert alert-error">
 
-⚠ <%= error %>
+<%= error %>
 
 </div>
 
@@ -257,16 +293,18 @@ Fetch →
 
 
 
+
 <%
 
 let posts=[];
 
 
-if(result){
+if(result && result.data){
 
-posts = result.data?.posts || result.data || [];
+posts = result.data.posts || result.data || [];
 
 }
+
 
 %>
 
@@ -275,7 +313,10 @@ posts = result.data?.posts || result.data || [];
 
 
 
-<% if(posts.length){ %>
+
+
+
+<% if(Array.isArray(posts) && posts.length){ %>
 
 
 
@@ -296,26 +337,26 @@ posts = result.data?.posts || result.data || [];
 <div class="post-header">
 
 
+<div class="company-logo">
 
-<% if(post.author?.profile_picture){ %>
+
+<% if(post.company_logo){ %>
 
 
-<img 
-
-src="<%= post.author.profile_picture %>"
-
-class="post-avatar"
-
-/>
+<img src="<%= post.company_logo %>">
 
 
 <% }else{ %>
 
 
-<div class="post-avatar"></div>
+🏢
 
 
 <% } %>
+
+
+</div>
+
 
 
 
@@ -323,20 +364,20 @@ class="post-avatar"
 <div>
 
 
-<div class="post-name">
+<div class="company-name">
 
 
-<%= post.author?.name || "LinkedIn User" %>
+<%= post.company_name || company %>
 
 
 </div>
 
 
 
-<div class="post-title">
+<div class="post-date">
 
 
-<%= post.author?.headline || "" %>
+<%= post.created_at?.formatted || '' %>
 
 
 </div>
@@ -358,7 +399,7 @@ class="post-avatar"
 <div class="post-text">
 
 
-<%= post.post_text || post.text || "" %>
+<%= post.text || post.post_text || post.content || '' %>
 
 
 </div>
@@ -369,52 +410,33 @@ class="post-avatar"
 
 
 
-<% if(post.image_url){ %>
-
-
-<img
-
-src="<%= post.image_url %>"
-
-class="post-image"
-
-/>
-
-
-<% } %>
-
-
-
-
-
-
-
-
-<div class="stats">
+<div class="post-stats">
 
 
 <span>
 
-👍 
-
-<%= post.post_stats?.total_reactions || 0 %>
-
-Reactions
+❤️ <%= post.likes || post.total_reactions || 0 %>
 
 </span>
+
 
 
 <span>
 
-💬
-
-<%= post.post_stats?.comments || 0 %>
-
-Comments
+💬 <%= post.comments || 0 %>
 
 </span>
 
 
+
+<span>
+
+🔁 <%= post.shares || 0 %>
+
+</span>
+
+
+
 </div>
 
 
@@ -422,8 +444,8 @@ Comments
 
 
 
-</div>
 
+</div>
 
 
 
@@ -435,22 +457,19 @@ Comments
 
 
 
-<% }else if(result){ %>
 
 
+<% } else if(result){ %>
 
-<div class="section-card">
 
+<div class="empty">
 
-No posts found
-
+No company posts found
 
 </div>
 
 
-
 <% } %>
-
 
 
 
@@ -464,10 +483,10 @@ No posts found
 
 
 
+
 <script src="/js/app.js"></script>
 
 
 </body>
-
 
 </html>

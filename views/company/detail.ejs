@@ -1,36 +1,579 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Company Detail — LI Scraper</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/app.css" />
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Company Detail — LI Scraper</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/app.css" />
+
+
+<style>
+
+
+.company-card{
+
+background:var(--bg2);
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+overflow:hidden;
+
+margin-top:20px;
+
+
+}
+
+
+
+.company-cover{
+
+height:150px;
+
+background:linear-gradient(135deg,#0a84ff,#00d4aa);
+
+
+}
+
+
+
+.company-info{
+
+padding:25px;
+
+position:relative;
+
+}
+
+
+
+.company-logo{
+
+width:90px;
+
+height:90px;
+
+border-radius:12px;
+
+background:var(--bg3);
+
+border:4px solid var(--bg2);
+
+position:absolute;
+
+top:-45px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:35px;
+
+overflow:hidden;
+
+
+}
+
+
+
+.company-logo img{
+
+width:100%;
+
+height:100%;
+
+object-fit:cover;
+
+}
+
+
+
+.company-name{
+
+margin-top:55px;
+
+font-size:25px;
+
+font-weight:800;
+
+}
+
+
+
+.company-tagline{
+
+color:var(--text2);
+
+margin-top:8px;
+
+font-size:14px;
+
+}
+
+
+
+.company-meta{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:15px;
+
+margin-top:20px;
+
+}
+
+
+
+.meta-box{
+
+background:var(--bg3);
+
+padding:10px 15px;
+
+border-radius:8px;
+
+font-size:13px;
+
+}
+
+
+
+.about{
+
+margin-top:20px;
+
+line-height:1.7;
+
+color:var(--text2);
+
+font-size:14px;
+
+}
+
+
+
+.website{
+
+margin-top:15px;
+
+color:var(--accent);
+
+}
+
+
+
+</style>
+
+
 </head>
+
+
+
+
 <body>
-  <%- include('../partials/sidebar', { page: 'company-detail' }) %>
-  <main class="main">
-    <header class="topbar">
-      <h1 class="topbar-title">Company Detail</h1>
-      <div class="topbar-meta"><code class="endpoint-badge">GET /company/detail</code></div>
-    </header>
-    <div class="content">
-      <div class="card">
-        <div class="card-title">Parameters</div>
-        <form method="POST">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="company">Company Slug</label>
-              <input type="text" id="company" name="company" value="<%= company %>" placeholder="e.g. google" required />
-            </div>
-            <button type="submit" class="btn btn-primary">Fetch →</button>
-          </div>
-        </form>
-      </div>
-      <%- include('../partials/result', { result, status, error }) %>
-    </div>
-  </main>
-  <script src="/js/app.js"></script>
+
+
+
+<%- include('../partials/sidebar', { page:'company-detail' }) %>
+
+
+
+<main class="main">
+
+
+
+<header class="topbar">
+
+
+<h1 class="topbar-title">
+
+Company Detail
+
+</h1>
+
+
+
+<div class="topbar-meta">
+
+<code class="endpoint-badge">
+
+GET /company/detail
+
+</code>
+
+
+</div>
+
+
+
+</header>
+
+
+
+
+
+
+<div class="content">
+
+
+
+
+
+<div class="card">
+
+
+<div class="card-title">
+
+Parameters
+
+</div>
+
+
+
+
+<form method="POST">
+
+
+<div class="form-row">
+
+
+<div class="form-group">
+
+
+<label>
+
+Company Name
+
+</label>
+
+
+
+<input
+
+type="text"
+
+name="company"
+
+value="<%= company || '' %>"
+
+placeholder="Google"
+
+required
+
+/>
+
+
+</div>
+
+
+
+
+<button class="btn btn-primary">
+
+Fetch →
+
+</button>
+
+
+
+</div>
+
+
+</form>
+
+
+
+</div>
+
+
+
+
+
+
+
+<% if(error){ %>
+
+
+<div class="alert alert-error">
+
+<%= error %>
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+<%
+
+let c={};
+
+
+if(result && result.data){
+
+c=result.data;
+
+}
+
+%>
+
+
+
+
+
+
+
+
+
+<% if(result){ %>
+
+
+
+
+<div class="company-card">
+
+
+
+<div class="company-cover"></div>
+
+
+
+
+
+<div class="company-info">
+
+
+
+
+
+<div class="company-logo">
+
+
+<% if(c.logo || c.logo_url){ %>
+
+
+<img src="<%= c.logo || c.logo_url %>">
+
+
+<% }else{ %>
+
+
+🏢
+
+
+<% } %>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="company-name">
+
+
+<%= c.name || c.company_name || company %>
+
+
+</div>
+
+
+
+
+
+
+<div class="company-tagline">
+
+
+<%= c.tagline || c.description || '' %>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="company-meta">
+
+
+<% if(c.industry){ %>
+
+
+<div class="meta-box">
+
+🏭 <%= c.industry %>
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+<% if(c.company_size || c.employee_count){ %>
+
+
+<div class="meta-box">
+
+👥 <%= c.company_size || c.employee_count %>
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+<% if(c.location){ %>
+
+
+<div class="meta-box">
+
+📍 <%= c.location %>
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<% if(c.description){ %>
+
+
+<div class="about">
+
+
+<h3>
+
+About
+
+</h3>
+
+
+<p>
+
+<%= c.description %>
+
+</p>
+
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+<% if(c.website){ %>
+
+
+<div class="website">
+
+
+🌐
+
+<a href="<%= c.website %>" target="_blank">
+
+<%= c.website %>
+
+</a>
+
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<% } %>
+
+
+
+
+
+
+
+</div>
+
+
+
+</main>
+
+
+
+<script src="/js/app.js"></script>
+
+
+
 </body>
+
 </html>

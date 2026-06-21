@@ -1,36 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Company Jobs — LI Scraper</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/app.css" />
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Company Jobs — LI Scraper</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/app.css" />
+
+
+
+<style>
+
+
+.job-card{
+
+background:var(--bg2);
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+padding:22px;
+
+margin-top:18px;
+
+
+}
+
+
+
+.job-title{
+
+font-size:18px;
+
+font-weight:800;
+
+color:var(--text);
+
+}
+
+
+.company-name{
+
+margin-top:5px;
+
+font-size:14px;
+
+color:var(--accent);
+
+
+}
+
+
+.job-info{
+
+display:flex;
+
+gap:20px;
+
+flex-wrap:wrap;
+
+margin-top:15px;
+
+font-size:13px;
+
+color:var(--text3);
+
+
+}
+
+
+.job-desc{
+
+margin-top:15px;
+
+background:var(--bg3);
+
+padding:15px;
+
+border-radius:8px;
+
+line-height:1.6;
+
+font-size:13px;
+
+
+}
+
+
+.job-link{
+
+display:inline-block;
+
+margin-top:15px;
+
+color:var(--accent);
+
+font-size:13px;
+
+}
+
+
+
+</style>
+
+
+
 </head>
+
+
+
 <body>
-  <%- include('../partials/sidebar', { page: 'company-jobs' }) %>
-  <main class="main">
-    <header class="topbar">
-      <h1 class="topbar-title">Company Jobs</h1>
-      <div class="topbar-meta"><code class="endpoint-badge">GET /company/jobs</code></div>
-    </header>
-    <div class="content">
-      <div class="card">
-        <div class="card-title">Parameters</div>
-        <form method="POST">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="company">Company Slug</label>
-              <input type="text" id="company" name="company" value="<%= company %>" placeholder="e.g. apple" required />
-            </div>
-            <button type="submit" class="btn btn-primary">Fetch →</button>
-          </div>
-        </form>
-      </div>
-      <%- include('../partials/result', { result, status, error }) %>
-    </div>
-  </main>
-  <script src="/js/app.js"></script>
+
+
+<%- include('../partials/sidebar', { page:'company-jobs' }) %>
+
+
+
+<main class="main">
+
+
+<header class="topbar">
+
+
+<h1 class="topbar-title">
+
+Company Jobs
+
+</h1>
+
+
+<div class="topbar-meta">
+
+
+<code class="endpoint-badge">
+
+GET /company/jobs
+
+</code>
+
+
+</div>
+
+
+</header>
+
+
+
+
+
+<div class="content">
+
+
+
+
+
+<div class="card">
+
+
+<div class="card-title">
+
+Parameters
+
+</div>
+
+
+
+<form method="POST">
+
+
+
+<div class="form-row">
+
+
+<div class="form-group">
+
+
+<label>
+
+Company Slug
+
+</label>
+
+
+
+<input
+
+type="text"
+
+id="company"
+
+name="company"
+
+value="<%= company || '' %>"
+
+placeholder="e.g. apple"
+
+required
+
+/>
+
+
+</div>
+
+
+
+
+<button type="submit" class="btn btn-primary">
+
+Fetch →
+
+</button>
+
+
+</div>
+
+
+</form>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<% if(error){ %>
+
+
+<div class="alert alert-error">
+
+<%= error %>
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+<%
+
+let jobs=[];
+
+
+if(result && result.data){
+
+jobs = result.data.jobs || result.data || [];
+
+}
+
+
+%>
+
+
+
+
+
+
+
+
+
+<% if(Array.isArray(jobs) && jobs.length){ %>
+
+
+
+
+
+<% jobs.forEach(job=>{ %>
+
+
+
+
+
+<div class="job-card">
+
+
+
+
+
+<div class="job-title">
+
+<%= job.title || job.job_title || 'Job Position' %>
+
+</div>
+
+
+
+
+
+<div class="company-name">
+
+
+🏢 
+
+<%= job.company || job.company_name || '' %>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="job-info">
+
+
+<% if(job.location){ %>
+
+<span>
+
+📍 <%= job.location %>
+
+</span>
+
+<% } %>
+
+
+
+
+
+<% if(job.employment_type){ %>
+
+<span>
+
+💼 <%= job.employment_type %>
+
+</span>
+
+<% } %>
+
+
+
+
+
+<% if(job.posted_date){ %>
+
+<span>
+
+🕒 <%= job.posted_date %>
+
+</span>
+
+<% } %>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<% if(job.description){ %>
+
+
+<div class="job-desc">
+
+
+<%= job.description.substring(0,300) %>
+
+
+<%= job.description.length > 300 ? '...' : '' %>
+
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+<% if(job.job_url || job.link){ %>
+
+
+<a
+
+target="_blank"
+
+class="job-link"
+
+href="<%= job.job_url || job.link %>">
+
+View Job →
+
+</a>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<% }) %>
+
+
+
+
+
+
+
+<% } else if(result){ %>
+
+
+
+<div class="card">
+
+
+No jobs found
+
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+
+</div>
+
+
+</main>
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
 </body>
+
+
 </html>

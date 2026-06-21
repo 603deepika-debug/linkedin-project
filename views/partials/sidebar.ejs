@@ -1,4 +1,4 @@
-<aside class="sidebar">
+<!-- <aside class="sidebar">
   <div class="sidebar-brand">
     <span class="brand-icon">⬡</span>
     <span class="brand-name">LI<br>Scraper</span>
@@ -31,4 +31,121 @@
   <div class="sidebar-footer">
     <span class="api-badge">RapidAPI</span>
   </div>
+</aside> -->
+
+
+<aside class="sidebar">
+
+  <div class="sidebar-brand">
+    <span class="brand-icon">⬡</span>
+    <span class="brand-name">LI<br>Scraper</span>
+  </div>
+
+
+  <nav class="sidebar-nav">
+
+
+    <!-- PROFILE -->
+    <div class="nav-group">
+
+      <div class="nav-label">Profile</div>
+
+
+      <a href="/linkedin/profile/detail"
+      class="nav-link <%= page==='profile-detail'?'active':'' %>">
+      Detail
+      </a>
+
+
+      <a href="/linkedin/profile/posts"
+      class="nav-link <%= page==='profile-posts'?'active':'' %>">
+      Posts
+      </a>
+
+
+      <a href="/linkedin/profile/comments"
+      class="nav-link <%= page==='profile-comments'?'active':'' %>">
+      Comments
+      </a>
+
+
+      <a href="/linkedin/profile/reactions"
+      class="nav-link <%= page==='profile-reactions'?'active':'' %>">
+      Reactions
+      </a>
+
+
+      <a href="/linkedin/profile/contact"
+      class="nav-link <%= page==='profile-contact'?'active':'' %>">
+      Contact
+      </a>
+
+
+      <a href="/linkedin/profile/upload"
+      class="nav-link upload-link <%= page==='profile-upload'?'active':'' %>">
+      ↑ Upload Profile
+      </a>
+
+
+      <a href="/linkedin/profile/view"
+      class="nav-link view-link <%= page==='profile-view'?'active':'' %>">
+      👤 Profile Page
+      </a>
+
+
+    </div>
+
+    <!-- COMPANY -->
+    <div class="nav-group">
+
+      <div class="nav-label">Company</div>
+
+
+      <a href="/linkedin/company/detail"
+      class="nav-link <%= page==='company-detail'?'active':'' %>">
+      Detail
+      </a>
+
+
+      <a href="/linkedin/company/posts"
+      class="nav-link <%= page==='company-posts'?'active':'' %>">
+      Posts
+      </a>
+
+
+    </div>
+
+
+
+
+
+    <!-- SEARCH -->
+    <div class="nav-group">
+
+      <div class="nav-label">Search</div>
+
+
+      <a href="/linkedin/search/companies"
+      class="nav-link <%= page==='search-companies'?'active':'' %>">
+      Companies
+      </a>
+
+
+      <a href="/linkedin/search/jobs"
+      class="nav-link <%= page==='search-jobs'?'active':'' %>">
+      Jobs
+      </a>
+
+
+    </div>
+
+
+  </nav>
+
+
+  <div class="sidebar-footer">
+    <span class="api-badge">RapidAPI</span>
+  </div>
+
+
 </aside>

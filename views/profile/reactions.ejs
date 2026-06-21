@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Profile Reactions — LI Scraper</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/app.css" />
+
+
+
+<style>
+
+
+.reaction-card{
+
+background:var(--bg2);
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+padding:20px;
+
+margin-top:20px;
+
+
+}
+
+
+
+.reaction-header{
+
+display:flex;
+
+gap:15px;
+
+align-items:center;
+
+
+}
+
+
+
+.reaction-avatar{
+
+width:55px;
+
+height:55px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+
+}
+
+
+
+.reaction-name{
+
+font-size:16px;
+
+font-weight:700;
+
+
+}
+
+
+
+.reaction-headline{
+
+font-size:12px;
+
+color:var(--text3);
+
+margin-top:4px;
+
+
+}
+
+
+
+.reaction-type{
+
+margin-top:15px;
+
+display:inline-block;
+
+background:var(--bg3);
+
+padding:6px 12px;
+
+border-radius:20px;
+
+font-size:12px;
+
+
+}
+
+
+
+.post-box{
+
+margin-top:15px;
+
+background:var(--bg3);
+
+padding:15px;
+
+border-radius:8px;
+
+font-size:13px;
+
+line-height:1.5;
+
+
+}
+
+
+
+.stats{
+
+margin-top:15px;
+
+display:flex;
+
+gap:20px;
+
+font-size:12px;
+
+color:var(--text3);
+
+
+}
+
+
+
+.linkedin-link{
+
+color:var(--accent);
+
+font-size:13px;
+
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+<%- include('../partials/sidebar', { page:'profile-reactions' }) %>
+
+
+
+<main class="main">
+
+
+
+<header class="topbar">
+
+
+<h1 class="topbar-title">
+Profile Reactions
+</h1>
+
+
+<div class="topbar-meta">
+
+<code class="endpoint-badge">
+
+GET /profile/reactions
+
+</code>
+
+</div>
+
+
+</header>
+
+
+
+
+<div class="content">
+
+
+
+
+
+<div class="card">
+
+
+<div class="card-title">
+Parameters
+</div>
+
+
+
+<form method="POST" action="/linkedin/profile/reactions">
+
+
+<div class="form-row">
+
+
+
+<div class="form-group">
+
+
+<label>
+LinkedIn Profile URL
+</label>
+
+
+
+<input
+
+type="text"
+
+id="profile_url"
+
+name="profile_url"
+
+value="<%= profile_url || '' %>"
+
+placeholder="https://www.linkedin.com/in/satya-nadella"
+
+required
+
+/>
+
+
+</div>
+
+
+
+
+<button type="submit" class="btn btn-primary">
+
+Fetch →
+
+</button>
+
+
+
+</div>
+
+
+</form>
+
+
+</div>
+
+
+
+
+
+
+
+
+<% if(error){ %>
+
+
+<div class="alert alert-error">
+
+<%= error %>
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+
+<%
+
+let reactions=[];
+
+
+if(result && result.data && result.data.reactions){
+
+reactions=result.data.reactions;
+
+}
+
+%>
+
+
+
+
+
+
+
+
+<% reactions.forEach(item=>{ %>
+
+
+
+
+
+<div class="reaction-card">
+
+
+
+
+
+<div class="reaction-header">
+
+
+
+
+
+<img
+
+src="<%= item.reacter?.profile_picture || item.user?.profile_picture %>"
+
+class="reaction-avatar"
+
+onerror="this.style.display='none'"
+
+/>
+
+
+
+
+
+<div>
+
+
+<div class="reaction-name">
+
+
+<%= item.reacter?.name || item.user?.name || 'Unknown User' %>
+
+
+</div>
+
+
+
+<div class="reaction-headline">
+
+
+<%= item.reacter?.subtitle || item.user?.headline || '' %>
+
+
+</div>
+
+
+
+<a
+
+class="linkedin-link"
+
+target="_blank"
+
+href="<%= item.reacter?.linkedin_url || item.user?.linkedin_url %>">
+
+
+View Profile
+
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="reaction-type">
+
+
+❤️ 
+
+<%= item.reaction_type || item.type || 'Reaction' %>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="post-box">
+
+
+<strong>
+
+Post
+
+</strong>
+
+
+<p>
+
+<%= item.post?.post_text?.substring(0,300) || '' %>
+
+...
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="stats">
+
+
+<span>
+
+❤️ 
+
+<%= item.post?.post_stats?.total_reactions || 0 %>
+
+Reactions
+
+</span>
+
+
+
+
+<span>
+
+💬
+
+<%= item.post?.post_stats?.comments || 0 %>
+
+Comments
+
+</span>
+
+
+
+
+
+<span>
+
+🕒
+
+<%= item.created_at?.relative || '' %>
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<% }) %>
+
+
+
+
+
+
+
+
+
+<% if(reactions.length===0 && result){ %>
+
+
+<div class="card">
+
+No reactions found
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+</div>
+
+
+</main>
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+</body>
+
+
+</html>
