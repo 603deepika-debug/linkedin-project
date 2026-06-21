@@ -79,9 +79,9 @@ function rapidRequest(path, method = 'GET', body = null) {
       res.on('end', () => {
         const raw = Buffer.concat(chunks).toString();
 
-        console.log('\nRAW RESPONSE:');
-        console.log(raw);
-        console.log('=====================\n');
+        // console.log('\nRAW RESPONSE:');
+        // console.log(raw);
+        // console.log('=====================\n');
 
         try {
           const json = JSON.parse(raw);
