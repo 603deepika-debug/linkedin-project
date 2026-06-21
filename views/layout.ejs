@@ -1,67 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= title || 'LinkedIn Scraper' %> — LI Scraper</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/app.css" />
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title><%= title || 'LinkedIn Scraper' %> — LI Scraper</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/app.css" />
+
 </head>
+
+
 <body>
-  <aside class="sidebar">
-    <div class="sidebar-brand">
-      <span class="brand-icon">⬡</span>
-      <span class="brand-name">LI<br>Scraper</span>
-    </div>
 
-    <nav class="sidebar-nav">
-      <div class="nav-group">
-        <div class="nav-label">Profile</div>
-        <a href="/linkedin/profile/detail"   class="nav-link <%= page === 'profile-detail'      ? 'active' : '' %>">Detail</a>
-        <a href="/linkedin/profile/posts"    class="nav-link <%= page === 'profile-posts'       ? 'active' : '' %>">Posts</a>
-        <a href="/linkedin/profile/experience" class="nav-link <%= page === 'profile-experience' ? 'active' : '' %>">Experience</a>
-        <a href="/linkedin/profile/education"  class="nav-link <%= page === 'profile-education'  ? 'active' : '' %>">Education</a>
-        <a href="/linkedin/profile/skills"   class="nav-link <%= page === 'profile-skills'      ? 'active' : '' %>">Skills</a>
-        <a href="/linkedin/profile/connections" class="nav-link <%= page === 'profile-connections' ? 'active' : '' %>">Connections</a>
-        <a href="/linkedin/profile/upload"   class="nav-link upload-link <%= page === 'profile-upload' ? 'active' : '' %>">↑ Upload Profile</a>
-      </div>
 
-      <div class="nav-group">
-        <div class="nav-label">Company</div>
-        <a href="/linkedin/company/detail"    class="nav-link <%= page === 'company-detail'    ? 'active' : '' %>">Detail</a>
-        <a href="/linkedin/company/employees" class="nav-link <%= page === 'company-employees' ? 'active' : '' %>">Employees</a>
-        <a href="/linkedin/company/jobs"      class="nav-link <%= page === 'company-jobs'      ? 'active' : '' %>">Jobs</a>
-      </div>
+<aside class="sidebar">
 
-      <div class="nav-group">
-        <div class="nav-label">Search</div>
-        <a href="/linkedin/search/people"    class="nav-link <%= page === 'search-people'    ? 'active' : '' %>">People</a>
-        <a href="/linkedin/search/companies" class="nav-link <%= page === 'search-companies' ? 'active' : '' %>">Companies</a>
-        <a href="/linkedin/search/jobs"      class="nav-link <%= page === 'search-jobs'      ? 'active' : '' %>">Jobs</a>
-      </div>
-    </nav>
 
-    <div class="sidebar-footer">
-      <span class="api-badge">RapidAPI</span>
-    </div>
-  </aside>
+<div class="sidebar-brand">
 
-  <main class="main">
-    <header class="topbar">
-      <h1 class="topbar-title"><%= title || 'Dashboard' %></h1>
-      <div class="topbar-meta">
-        <% if (typeof endpoint !== 'undefined') { %>
-          <code class="endpoint-badge"><%= method || 'GET' %> <%= endpoint %></code>
-        <% } %>
-      </div>
-    </header>
+<span class="brand-icon">⬡</span>
 
-    <div class="content">
-      <%- body %>
-    </div>
-  </main>
+<span class="brand-name">
+LI<br>Scraper
+</span>
 
-  <script src="/js/app.js"></script>
+</div>
+
+
+
+
+
+<nav class="sidebar-nav">
+
+
+
+<!-- PROFILE -->
+
+<div class="nav-group">
+
+
+<div class="nav-label">
+Profile
+</div>
+
+
+
+<a href="/linkedin/profile/detail"
+class="nav-link <%= page === 'profile-detail' ? 'active' : '' %>">
+Detail
+</a>
+
+
+
+<a href="/linkedin/profile/posts"
+class="nav-link <%= page === 'profile-posts' ? 'active' : '' %>">
+Posts
+</a>
+
+
+
+<a href="/linkedin/profile/comments"
+class="nav-link <%= page === 'profile-comments' ? 'active' : '' %>">
+Comments
+</a>
+
+
+
+<a href="/linkedin/profile/reactions"
+class="nav-link <%= page === 'profile-reactions' ? 'active' : '' %>">
+Reactions
+</a>
+
+
+
+<a href="/linkedin/profile/contact"
+class="nav-link <%= page === 'profile-contact' ? 'active' : '' %>">
+Contact
+</a>
+
+
+
+<a href="/linkedin/profile/upload"
+class="nav-link upload-link <%= page === 'profile-upload' ? 'active' : '' %>">
+↑ Upload Profile
+</a>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- COMPANY -->
+
+
+<div class="nav-group">
+
+
+<div class="nav-label">
+Company
+</div>
+
+
+
+
+<a href="/linkedin/company/detail"
+class="nav-link <%= page === 'company-detail' ? 'active' : '' %>">
+Detail
+</a>
+
+
+
+
+<a href="/linkedin/company/posts"
+class="nav-link <%= page === 'company-posts' ? 'active' : '' %>">
+Posts
+</a>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- SEARCH -->
+
+
+<div class="nav-group">
+
+
+<div class="nav-label">
+Search
+</div>
+
+
+
+
+<a href="/linkedin/search/companies"
+class="nav-link <%= page === 'search-companies' ? 'active' : '' %>">
+Companies
+</a>
+
+
+
+
+<a href="/linkedin/search/jobs"
+class="nav-link <%= page === 'search-jobs' ? 'active' : '' %>">
+Jobs
+</a>
+
+
+
+</div>
+
+
+
+
+
+</nav>
+
+
+
+
+
+<div class="sidebar-footer">
+
+<span class="api-badge">
+RapidAPI
+</span>
+
+</div>
+
+
+
+</aside>
+
+
+
+
+
+
+
+<main class="main">
+
+
+
+<header class="topbar">
+
+
+<h1 class="topbar-title">
+
+<%= title || 'Dashboard' %>
+
+</h1>
+
+
+
+
+<div class="topbar-meta">
+
+
+<% if (typeof endpoint !== 'undefined') { %>
+
+
+<code class="endpoint-badge">
+
+<%= method || 'GET' %> <%= endpoint %>
+
+</code>
+
+
+<% } %>
+
+
+</div>
+
+
+</header>
+
+
+
+
+
+
+<div class="content">
+
+
+<%- body %>
+
+
+</div>
+
+
+
+
+
+</main>
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+
 </body>
+
+
 </html>

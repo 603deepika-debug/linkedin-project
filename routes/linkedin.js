@@ -47,6 +47,7 @@ router.post('/profile/posts', async (req, res) => {
   }
 });
 
+
 router.get('/profile/comments', (req, res) => {
   res.render('profile/comments', { result: null, status: null, error: null, profile_url: '' });
 });
